@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="集成学习主要范围如下，本篇主要讲blending和stacking：   1.blending（1）uniform blending 最终结果是各个子学习器结果的投票（分类问题）或平均（回归问题），各个子学习器的结果具有相同权重。 （2）linear blending  最终结果是各个子学习器（上图中的M1 M2…MM）结果的加权叠加，各个子学习器的结果具有不同权重，通过再训练一个线性模型（上图中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="集成学习blending和stacking">
+<meta property="og:url" content="http://yoursite.com/2020/02/17/模型融合blending和stack/index.html">
+<meta property="og:site_name" content="yvelzhang">
+<meta property="og:description" content="集成学习主要范围如下，本篇主要讲blending和stacking：   1.blending（1）uniform blending 最终结果是各个子学习器结果的投票（分类问题）或平均（回归问题），各个子学习器的结果具有相同权重。 （2）linear blending  最终结果是各个子学习器（上图中的M1 M2…MM）结果的加权叠加，各个子学习器的结果具有不同权重，通过再训练一个线性模型（上图中">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/模型融合blending和stack/image-20200217163456322.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88blending%E5%92%8Cstack/image-20200217164808032.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/模型融合blending和stack/image-20200217195553120.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88blending%E5%92%8Cstack/image-20200217200632015.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/模型融合blending和stack/image-20200217200656391.png">
+<meta property="og:updated_time" content="2020-02-17T12:10:55.555Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="集成学习blending和stacking">
+<meta name="twitter:description" content="集成学习主要范围如下，本篇主要讲blending和stacking：   1.blending（1）uniform blending 最终结果是各个子学习器结果的投票（分类问题）或平均（回归问题），各个子学习器的结果具有相同权重。 （2）linear blending  最终结果是各个子学习器（上图中的M1 M2…MM）结果的加权叠加，各个子学习器的结果具有不同权重，通过再训练一个线性模型（上图中">
+<meta name="twitter:image" content="http://yoursite.com/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/模型融合blending和stack/image-20200217163456322.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/02/17/模型融合blending和stack/">
+
+
+
+
+
+  <title>集成学习blending和stacking | yvelzhang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yvelzhang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/17/模型融合blending和stack/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yvelzhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yvelzhang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">集成学习blending和stacking</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-17T16:32:53+08:00">
+                2020-02-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span id="busuanzi_value_page_pv"></span>次阅读
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>集成学习主要范围如下，本篇主要讲blending和stacking：</p>
+<img src="/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/模型融合blending和stack/image-20200217163456322.png" alt="image-20200217163456322" style="zoom:50%;">
+
+<h3 id="1-blending"><a href="#1-blending" class="headerlink" title="1.blending"></a>1.blending</h3><p>（1）uniform blending</p>
+<p>最终结果是各个子学习器结果的投票（分类问题）或平均（回归问题），各个子学习器的结果具有相同权重。</p>
+<p>（2）linear blending</p>
+<p><img src="/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88blending%E5%92%8Cstack/image-20200217164808032.png" alt="image-20200217164808032"></p>
+<p>最终结果是各个子学习器（上图中的M1 M2…MM）结果的加权叠加，各个子学习器的结果具有不同权重，通过再训练一个线性模型（上图中的M0）来学习各个子模型的权重（子模型的输出即为第二层线性模型的输入特征）</p>
+<p><strong>将原始的训练数据集按照一定的比例分为训练数据集DT和验证(或者说测试)数据集DA，算法训练过程如下：</strong></p>
+<p>假设要构建M个模型M1，M2，……MM。以模型Mi为例说明：对训练数据集DT进行学习，得到模型Mi。学习完毕后对验证数据DA的计算结果为DA_Mi，对预测数据集合的计算结果为DP_Mi。待M个模型全部建立完成后：</p>
+<ol>
+<li>对验证数据得到的结果集合为DA_M1，DA_M2，……，DA_MM，其中每个结果序列都可看作一个新的特征，将这些新的特征排列起来看作一个训练数据集的输入，输出就是原始数据集中验证数据集的输出。输出和输入结合起来构成一个完整的训练数据集；</li>
+<li>对预测数据得到的结果集合为DP_M1，DP_M2，……，DP_MM，其中每个结果序列都可看作一个新的特征，将这些新的特征排列起来看作一个预测数据集的输入；</li>
+<li>对a中得到的训练数据集建立模型M0，学习完毕后，该模型对于b中得到的预测数据集进行计算，得到最终的结果；</li>
+</ol>
+<p>（3）any blending</p>
+<p>与linear blending相似，唯一不同是子模型的权重可以由任何模型（不一定要是线性模型）来进行训练。</p>
+<h3 id="2-stacking"><a href="#2-stacking" class="headerlink" title="2.stacking"></a>2.stacking</h3><p>代码参考（<a href="https://blog.csdn.net/zgj_gutou/article/details/88598934）" target="_blank" rel="noopener">https://blog.csdn.net/zgj_gutou/article/details/88598934）</a></p>
+<p>结构示意如下：</p>
+<img src="/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/模型融合blending和stack/image-20200217195553120.png" alt="image-20200217195553120" style="zoom: 50%;">
+
+<p>这里我们用二分类的例子做介绍。<br>例如我们用 RandomForestClassifier, ExtraTreesClassifier, GradientBoostingClassifier 作为第一层学习器（当然这里我们可以添加更多的分类器，也可以用不同的特征组合但是同样的学习方法作为基分类器）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">clfs = [</span><br><span class="line">        RandomForestClassifier(n_estimators = n_trees, criterion = <span class="string">'gini'</span>),</span><br><span class="line">        ExtraTreesClassifier(n_estimators = n_trees * 2, criterion = <span class="string">'gini'</span>),</span><br><span class="line">        GradientBoostingClassifier(n_estimators = n_trees),</span><br><span class="line">    ]</span><br></pre></td></tr></table></figure>
+
+<p>step1:** 训练第一层学习器，并得到第二层学习器所需要的数据，这里会用到 k 折交叉验证。我们首先会将数据集进行一个划分，比如使用80%的训练数据来训练，20%的数据用来测试</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dev_cutoff = len(Y) * <span class="number">4</span>/<span class="number">5</span></span><br><span class="line">    X_dev = X[<span class="symbol">:dev_cutoff</span>]</span><br><span class="line">    Y_dev = Y[<span class="symbol">:dev_cutoff</span>]</span><br><span class="line">    X_test = X[<span class="symbol">dev_cutoff:</span>]</span><br><span class="line">    Y_test = Y[<span class="symbol">dev_cutoff:</span>]</span><br></pre></td></tr></table></figure>
+
+<p>然后对训练数据通过交叉验证训练 clf，并得到第二层的训练数据 blend_train,同时，在每个基分类器的每一折交叉验证中，我们都会对测试数据进行一次预测，以得到我们blend_test，二者的定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">blend_train = np.zeros((X_dev.shape[0], len(clfs))) # Number of training data x Number of classifiers</span><br><span class="line">blend_test = np.zeros((X_test.shape[0], len(clfs))) # Number of testing data x Number of classifiers</span><br></pre></td></tr></table></figure>
+
+<p>按照上面说的，blend_train基于下面的方法得到，注意，下图是对于一个分类器来说的，所以每个分类器得到的blend_train的行数与用于训练的数据一样多，所以blend_train的shape为X_dev.shape[0]*len(clfs)，即训练集长度 * 基分类器个数：</p>
+<p><img src="/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88blending%E5%92%8Cstack/image-20200217200632015.png" alt="image-20200217200632015"></p>
+<p>而对于第二轮的测试集blend_test来说，由于每次交叉验证的过程中都要进行一次预测，假设我们是5折交叉验证，那么对于每个分类器来说，得到的blend_test的shape是测试集行数 * 交叉验证折数，此时的做法是，对axis=1方向取平均值，以得到测试集行数 * 1 的测试数据，所以总的blend_test就是测试集行数 * 基分类器个数，可以跟blend_train保持一致：</p>
+<img src="/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/模型融合blending和stack/image-20200217200656391.png" alt="image-20200217200656391" style="zoom:50%;">
+
+<p>得到blend_train 和 blend_test的代码如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> j, clf <span class="keyword">in</span> enumerate(clfs):</span><br><span class="line">        <span class="built_in">print</span> <span class="string">'Training classifier [%s]'</span> % (j)</span><br><span class="line">        blend_test_j = np.zeros((X_test.shape[0], len(skf))) <span class="comment"># Number of testing data x Number of folds , we will take the mean of the predictions later</span></span><br><span class="line">        <span class="keyword">for</span> i, (train_index, cv_index) <span class="keyword">in</span> enumerate(skf):</span><br><span class="line">            <span class="built_in">print</span> <span class="string">'Fold [%s]'</span> % (i)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># This is the training and validation set</span></span><br><span class="line">            X_train = X_dev[train_index]</span><br><span class="line">            Y_train = Y_dev[train_index]</span><br><span class="line">            X_cv = X_dev[cv_index]</span><br><span class="line">            Y_cv = Y_dev[cv_index]</span><br><span class="line">            </span><br><span class="line">            clf.fit(X_train, Y_train)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># This output will be the basis for our blended classifier to train against,</span></span><br><span class="line">            <span class="comment"># which is also the output of our classifiers</span></span><br><span class="line">            blend_train[cv_index, j] = clf.predict(X_cv)</span><br><span class="line">            blend_test_j[:, i] = clf.predict(X_test)</span><br><span class="line">        <span class="comment"># Take the mean of the predictions of the cross validation set</span></span><br><span class="line">        blend_test[:, j] = blend_test_j.mean(1)</span><br></pre></td></tr></table></figure>
+
+<p>接着我们就可以用 blend_train, Y_dev 去训练第二层的学习器 LogisticRegression(当然也可以是别的分类器，比如lightGBM，XGBoost）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bclf = LogisticRegression()</span><br><span class="line">bclf.fit(blend_train, Y_dev)</span><br></pre></td></tr></table></figure>
+
+<p>最后，基于我们训练的二级分类器，我们可以预测测试集 blend_test，并得到 score：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Y_test_predict = bclf.predict(blend_test)</span><br><span class="line">score = metrics.accuracy_score(Y_test, Y_test_predict)</span><br><span class="line"><span class="built_in">print</span> <span class="string">'Accuracy = %s'</span> % (score)</span><br></pre></td></tr></table></figure>
+
+<p>如果是多分类怎么办呢，我们这里就不能用predict方法，我么要用的是predict_proba方法，得到基分类器对每个类的预测概率代入二级分类器中训练，修改的部分代码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">blend_train = np.zeros((np.<span class="keyword">array</span>(X_dev.values.tolist()).shape[<span class="number">0</span>], num_classes*len(clfs)),dtype=np.float32)  <span class="comment"># Number of training data x Number of classifiers</span></span><br><span class="line">blend_test = np.zeros((np.<span class="keyword">array</span>(X_test.values.tolist()).shape[<span class="number">0</span>], num_classes*len(clfs)),dtype=np.float32)  <span class="comment"># Number of testing data x Number of classifiers</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># For each classifier, we train the number of fold times (=len(skf))</span></span><br><span class="line">    <span class="keyword">for</span> j, clf in enumerate(clfs):</span><br><span class="line">        <span class="keyword">for</span> i, (train_index, cv_index) in enumerate(skf):</span><br><span class="line">            <span class="keyword">print</span>(<span class="string">'Fold [%s]'</span> % (i))</span><br><span class="line"></span><br><span class="line">            <span class="comment"># This is the training and validation set</span></span><br><span class="line">            X_train = X_dev[train_index]</span><br><span class="line">            Y_train = Y_dev[train_index]</span><br><span class="line">            X_cv = X_dev[cv_index]</span><br><span class="line"></span><br><span class="line">            X_train = np.concatenate((X_train, ret_x),axis=<span class="number">0</span>)</span><br><span class="line">            Y_train = np.concatenate((Y_train, ret_y),axis=<span class="number">0</span>)</span><br><span class="line">            clf.fit(X_train, Y_train)</span><br><span class="line">            blend_train[cv_index, j*num_classes:(j+<span class="number">1</span>)*num_classes] = clf.predict_proba(X_cv)</span><br><span class="line">            blend_test[:, j*num_classes:(j+<span class="number">1</span>)*num_classes] += clf.predict_proba(X_test)</span><br><span class="line">blend_test = blend_test / float(n_folds)</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码修改的主要就是blend_train和blend_test的shape，可以看到，对于多分类问题来说，二者的第二维的shape不再是基分类器的数量，而是class的数量*基分类器的数量，这是大家要注意的，否则可能不会得到我们想要的结果。</p>
+<h3 id="3-Stacking-和-blending的区别"><a href="#3-Stacking-和-blending的区别" class="headerlink" title="3.Stacking 和 blending的区别"></a>3.Stacking 和 blending的区别</h3><p>bending和stacking的区别：Blending的主要区别在于训练集不是通过K-Fold的CV策略来获得预测值从而生成第二阶段模型的特征，而是建立一个Holdout集，例如10%的训练数据，第二阶段的stacker模型就基于第一阶段模型对这10%训练数据的预测值进行拟合</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/08/SEM笔记/未命名/" rel="next" title>
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/11/回归问题中的各种损失函数/" rel="prev" title="回归问题常用的各种损失函数和评估指标">
+                回归问题常用的各种损失函数和评估指标 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yvelzhang</p>
+              <p class="site-description motion-element" itemprop="description">喵喵喵</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-blending"><span class="nav-number">1.</span> <span class="nav-text">1.blending</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-stacking"><span class="nav-number">2.</span> <span class="nav-text">2.stacking</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Stacking-和-blending的区别"><span class="nav-number">3.</span> <span class="nav-text">3.Stacking 和 blending的区别</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yvelzhang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+<div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv" style="display:none">
+    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    <span class="post-meta-divider">|</span>
+</span>
+<span id="busuanzi_container_site_uv" style="display:none">
+    有<span id="busuanzi_value_site_uv"></span>人看过我的博客啦
+</span>
+</div>
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

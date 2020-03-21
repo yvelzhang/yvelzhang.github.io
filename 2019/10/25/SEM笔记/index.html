@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="sem出价，广告展现排名根据出价的竞得排名来确定 关键词价格调整策略  离成交近的词高出价 精确匹配高出价，宽匹配低出价 根据地域转化强弱出价 根据时段和终端，这个就是好的时段可以提高点出价，就是拉时段系数比例，另外PC和YD端也是要区分开来跑的 根据排名，转化率效果好的词，排名较低，可适当提价  品牌词：防守策略，点击率高，一般出价高 竞品词：点击率低，一般出价低 类型词：点击率低，一般出价低">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SEM笔记">
+<meta property="og:url" content="http://yoursite.com/2019/10/25/SEM笔记/index.html">
+<meta property="og:site_name" content="yvelzhang">
+<meta property="og:description" content="sem出价，广告展现排名根据出价的竞得排名来确定 关键词价格调整策略  离成交近的词高出价 精确匹配高出价，宽匹配低出价 根据地域转化强弱出价 根据时段和终端，这个就是好的时段可以提高点出价，就是拉时段系数比例，另外PC和YD端也是要区分开来跑的 根据排名，转化率效果好的词，排名较低，可适当提价  品牌词：防守策略，点击率高，一般出价高 竞品词：点击率低，一般出价低 类型词：点击率低，一般出价低">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/SEM笔记/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/SEM笔记/image-20191028144300296.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/SEM笔记/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/SEM%E7%AC%94%E8%AE%B0/image-20191028145940294.png">
+<meta property="og:updated_time" content="2019-11-01T12:11:06.055Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SEM笔记">
+<meta name="twitter:description" content="sem出价，广告展现排名根据出价的竞得排名来确定 关键词价格调整策略  离成交近的词高出价 精确匹配高出价，宽匹配低出价 根据地域转化强弱出价 根据时段和终端，这个就是好的时段可以提高点出价，就是拉时段系数比例，另外PC和YD端也是要区分开来跑的 根据排名，转化率效果好的词，排名较低，可适当提价  品牌词：防守策略，点击率高，一般出价高 竞品词：点击率低，一般出价低 类型词：点击率低，一般出价低">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/25/SEM笔记/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/SEM笔记/image-20191028144300296.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/25/SEM笔记/">
+
+
+
+
+
+  <title>SEM笔记 | yvelzhang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yvelzhang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/25/SEM笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yvelzhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yvelzhang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SEM笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-25T15:46:06+08:00">
+                2019-10-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span id="busuanzi_value_page_pv"></span>次阅读
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>sem出价，广告展现排名根据出价的竞得排名来确定</p>
+<p><strong>关键词价格调整策略</strong></p>
+<ol>
+<li>离成交近的词高出价</li>
+<li>精确匹配高出价，宽匹配低出价</li>
+<li>根据地域转化强弱出价</li>
+<li>根据时段和终端，这个就是好的时段可以提高点出价，就是拉时段系数比例，另外PC和YD端也是要区分开来跑的</li>
+<li>根据排名，转化率效果好的词，排名较低，可适当提价</li>
+</ol>
+<p>品牌词：防守策略，点击率高，一般出价高</p>
+<p>竞品词：点击率低，一般出价低</p>
+<p>类型词：点击率低，一般出价低</p>
+<p><strong>百度现有出价策略：</strong></p>
+<p>排名倾向：设定排名目标与出价范围，在范围内达成目标</p>
+<p>排名胜出：设定对手url与出价范围，在范围内压制对手</p>
+<p>点击最大化：在出价范围内，最大化点击</p>
+<p><strong>缺点是无法和最终效果数据关联起来</strong></p>
+<p><strong>应用宝sem策略：</strong></p>
+<img src="/2019/10/25/SEM笔记/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/SEM笔记/image-20191028144300296.png" alt="image-20191028144300296" style="zoom: 25%;">
+
+<p><strong>单个关键词收益最大化出价策略：</strong></p>
+<p>边际收益&gt;0   寻找能拿到首位的最低出价</p>
+<p>边际收益&lt;0   降低出价至边际收益大于0</p>
+<p>（我们可以用CPA来替换其中的收益）</p>
+<p><strong>拓词：</strong>基于NLP语义泛化拓词</p>
+<p><strong>应用宝SEM闭环框架</strong>：</p>
+<p><img src="/2019/10/25/SEM笔记/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/SEM%E7%AC%94%E8%AE%B0/image-20191028145940294.png" alt="image-20191028145940294"></p>
+<p>我们的投放目标：在CPA可接受的条件下，尽可能多的带量</p>
+<p>目标拆解：</p>
+<p>a. 品牌词:  降成本</p>
+<p>​    头部词：价格向下试探，保排名，保量；</p>
+<p>​    非头部词（点击率低，出价高）：降价或关停，降低成本</p>
+<p>b. 非品牌词： 提量（成本范围内）</p>
+<p>​    头部词：向上提价，带更多量（发掘头部非品牌词）</p>
+<p>​    非头部词（点击率低）：降价或关停，降低CPA成本</p>
+<p>对无点击的词提高出价，使之积累一定的点击</p>
+<p>利用点击数据试探对手的出价</p>
+<h3 id="调价"><a href="#调价" class="headerlink" title="调价"></a>调价</h3><h4 id="品牌词：保排名，降低成本"><a href="#品牌词：保排名，降低成本" class="headerlink" title="品牌词：保排名，降低成本"></a><strong>品牌词：保排名，降低成本</strong></h4><p>设置：排名r，初始出价p0，设置出价上限pu，出价下限pd</p>
+<p>输入参数：</p>
+<p>​            品牌词ID</p>
+<p>​            每个词前一日出价，展现/点击数据，平均点击价格，平均排名，所在计划，所在单元            </p>
+<p>​            </p>
+<p>每日调整，基于前一日数据：</p>
+<p>for（every word）</p>
+<p>{</p>
+<p>​       if（排名 高于 r） 向下调价 0.2</p>
+<p>​       if（排名 低于 r） 向上调价 min(  (排名 - r) * k， pu )，最低调价0.2</p>
+<p>​       对于满足总曝光条件，点击率低于 1% 的品牌词，停止投放</p>
+<p>}</p>
+<h4 id="非品牌词（重点）：在目标CPA范围内，最大化转化"><a href="#非品牌词（重点）：在目标CPA范围内，最大化转化" class="headerlink" title="非品牌词（重点）：在目标CPA范围内，最大化转化"></a><strong>非品牌词（重点）：</strong>在目标CPA范围内，最大化转化</h4><p>根据目标CPA和单元CVR来算点击收益，控制新增点击成本&lt;新增点击收益</p>
+<p>单元CVR：单元注册数量/单元点击数量</p>
+<p>风险点：CVR数据稀疏</p>
+<p>设置：初始出价p0，出价上限pu，出价下限pd，目标CPA</p>
+<p>输入参数：非品牌词ID</p>
+<p>​                   每个词前一日出价，展现/点击数据，平均点击价格，平均排名，所在计划，所在单元</p>
+<p>​                   每个词累计展现/点击数据，平均点击价格，平均排名，所在计划，所在单元</p>
+<p>​                   每个单元累计消费，展现，点击，注册/回流</p>
+<p>每日调整，基于前一日数据,  以及累计数据：</p>
+<p>for（every word）</p>
+<p>{</p>
+<p>​     if（累计点击 &lt; 20 且 排名低于1.1）向上调价 0.5     //冷启动          </p>
+<p>​     if（累计点击&gt; 20 且 所在单元转化超过10个）</p>
+<p>​     {</p>
+<p>​          新增收益 = 前一日点击次数 * 单元cvr * 目标CPA</p>
+<p>​          新增成本 = 前一日费用         </p>
+<p>​          调价系数 = |（新增收益 - 新增成本）/  点击数量|</p>
+<p>​           </p>
+<p>​          //新增边际收益大于0，向上提价，寻找排名第一的最低价</p>
+<p>​          //新增边际收益小于0，向下降价至边际收益大于等于0</p>
+<p>​          If( 新增收益-新增成本&gt;0  and  排名低于1)    向上调价 0. 8  *  调价系数，最低调价 0. 2</p>
+<p>​          If( 新增收益-新增成本 &gt;0 and  排名为1） 向下调价0.2试探底价           </p>
+<p>​          if( 新增收益-新增成本 &lt;0 )    向下调价  1.2  *  调价系数，最低调价 0. 2         </p>
+<p>​     }</p>
+<p>}</p>
+<h3 id="拓词"><a href="#拓词" class="headerlink" title="拓词"></a>拓词</h3><h4 id="品类词"><a href="#品类词" class="headerlink" title="品类词"></a>品类词</h4><p>品类相似度计算</p>
+<h4 id="竟品词"><a href="#竟品词" class="headerlink" title="竟品词"></a>竟品词</h4><p>竟品相似度计算</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/21/ctr预估常用深度模型/" rel="next" title="ctr预估常用深度模型">
+                <i class="fa fa-chevron-left"></i> ctr预估常用深度模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/01/spark知识点/" rel="prev" title="spark知识点">
+                spark知识点 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yvelzhang</p>
+              <p class="site-description motion-element" itemprop="description">喵喵喵</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#调价"><span class="nav-number">1.</span> <span class="nav-text">调价</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#品牌词：保排名，降低成本"><span class="nav-number">1.1.</span> <span class="nav-text">品牌词：保排名，降低成本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#非品牌词（重点）：在目标CPA范围内，最大化转化"><span class="nav-number">1.2.</span> <span class="nav-text">非品牌词（重点）：在目标CPA范围内，最大化转化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拓词"><span class="nav-number">2.</span> <span class="nav-text">拓词</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#品类词"><span class="nav-number">2.1.</span> <span class="nav-text">品类词</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#竟品词"><span class="nav-number">2.2.</span> <span class="nav-text">竟品词</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yvelzhang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+<div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv" style="display:none">
+    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    <span class="post-meta-divider">|</span>
+</span>
+<span id="busuanzi_container_site_uv" style="display:none">
+    有<span id="busuanzi_value_site_uv"></span>人看过我的博客啦
+</span>
+</div>
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

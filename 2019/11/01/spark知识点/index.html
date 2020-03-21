@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="sparkCore（RDD）特点分区： 数据是由多个分区组成 可以指定分区的方式 抽象： 每个分区不一定有物理存储 只能通过接口获取分区数据（只读：只能RDD-&amp;gt;RDD） 算子两类算子：transformations 和action窄依赖：分区一对一宽依赖：分区多对多，需shuffle Transformation算子： map/filter/flatmap/mapPartitions/ma">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spark知识点">
+<meta property="og:url" content="http://yoursite.com/2019/11/01/spark知识点/index.html">
+<meta property="og:site_name" content="yvelzhang">
+<meta property="og:description" content="sparkCore（RDD）特点分区： 数据是由多个分区组成 可以指定分区的方式 抽象： 每个分区不一定有物理存储 只能通过接口获取分区数据（只读：只能RDD-&amp;gt;RDD） 算子两类算子：transformations 和action窄依赖：分区一对一宽依赖：分区多对多，需shuffle Transformation算子： map/filter/flatmap/mapPartitions/ma">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-03T04:09:36.204Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="spark知识点">
+<meta name="twitter:description" content="sparkCore（RDD）特点分区： 数据是由多个分区组成 可以指定分区的方式 抽象： 每个分区不一定有物理存储 只能通过接口获取分区数据（只读：只能RDD-&amp;gt;RDD） 算子两类算子：transformations 和action窄依赖：分区一对一宽依赖：分区多对多，需shuffle Transformation算子： map/filter/flatmap/mapPartitions/ma">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/11/01/spark知识点/">
+
+
+
+
+
+  <title>spark知识点 | yvelzhang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yvelzhang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/01/spark知识点/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yvelzhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yvelzhang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">spark知识点</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-01T20:12:42+08:00">
+                2019-11-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span id="busuanzi_value_page_pv"></span>次阅读
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="sparkCore（RDD）"><a href="#sparkCore（RDD）" class="headerlink" title="sparkCore（RDD）"></a>sparkCore（RDD）</h3><h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a><strong>特点</strong></h4><p>分区：</p>
+<p>数据是由多个分区组成</p>
+<p>可以指定分区的方式</p>
+<p>抽象：</p>
+<p>每个分区不一定有物理存储</p>
+<p>只能通过接口获取分区数据（只读：只能RDD-&gt;RDD）</p>
+<h4 id="算子"><a href="#算子" class="headerlink" title="算子"></a>算子</h4><p>两类算子：transformations 和action<br>窄依赖：分区一对一<br>宽依赖：分区多对多，需shuffle</p>
+<p><strong>Transformation算子：</strong></p>
+<p>map/filter/flatmap/mapPartitions/mapPartitionsWithIndex/sample/union/intersection</p>
+<p>distinct/groupByKey/reduceByKey/aggregateByKey/sortByKey/join/cogroup/cartesian/pipe</p>
+<p>coalesce/repatition/repartitionAndSortWithinPartitions</p>
+<p><strong>Action算子</strong></p>
+<p>reduce/collect/count/first/takeSample/take/takeOrdered/saveAsTextFile/repartitionAndSortWithinPartitions</p>
+<p>saveAsObjectFile/countByKey/foreach</p>
+<p>详细应用参照链接 <a href="https://blog.csdn.net/Fortuna_i/article/details/81170565" target="_blank" rel="noopener">https://blog.csdn.net/Fortuna_i/article/details/81170565</a></p>
+<h4 id="Scheduler"><a href="#Scheduler" class="headerlink" title="Scheduler"></a>Scheduler</h4><p>job：action为界<br>stage：job的子集，以shuffle为界（宽依赖）<br>task：stage的子集，根据分区数量为定</p>
+<p>Stage调度执行：从最后一个stage反向回溯，寻找所依赖的stage</p>
+<p>Task调度：开启一个线程循环，不断根据当前可用资源去取task执行</p>
+<h4 id="资源配置"><a href="#资源配置" class="headerlink" title="资源配置"></a>资源配置</h4><p>stage的分区数量决定task有多少</p>
+<p>单个executor有多个core，每个core运行一个task，单个executor多个task共享内存</p>
+<p>建议避免：<br>太多的cpu或者太多的executor<br>太多分区（任务过细，轮数过多，单个core不超过10个partition）</p>
+<h4 id="shuffle"><a href="#shuffle" class="headerlink" title="shuffle"></a>shuffle</h4><p>过程分为二阶段 write &amp; read<br>引发shuffle操作的算子：repartition/*bykey/join &amp; cogroup</p>
+<p>代价很高（序列化，跨机器，读写文件）</p>
+<p><strong>阶段一 write：</strong><br>datafile： 使用map分区（hash），每个分区内数据按照记录排序<br>index file： 索引文件</p>
+<p><strong>阶段二 read：</strong><br>每个分区，根据索引文件，从相应datafile中读取数据，做归并排序</p>
+<p><strong>shuffle调优</strong></p>
+<p>a.优化数据结构：</p>
+<p>尽可能使用原生类型（Int，Long，Double）</p>
+<p>尽可能使用对象数组以及原生类型数组以替代Java或者scala集合类</p>
+<p>尽可能避免采用潜逃数据结构保存小对象</p>
+<p>b.主动shuffle repartition：</p>
+<p>如果分区较少, 可加大分区，将任务细分</p>
+<p>c.提高后续分布式运行的速度</p>
+<p>调整shuffle read 并发（根据内存大小）：maxSizeInFlight参数</p>
+<p>d.避免使用groupbykey （OOM风险，单个key连续内存） 可以用reducebykey/aggregateByKey优化</p>
+<p>例子：groupByKey.mapValues(_.sum) </p>
+<p>可以用rdd.reduceByKey(_ _+ _)来代替</p>
+<h4 id="broadcast"><a href="#broadcast" class="headerlink" title="broadcast"></a>broadcast</h4><p>广播大对象（超过10M）：每个executor传输一次大对象，任务用到的时候直接本地取用，不需要每次都从driver传输</p>
+<p>broadcast+map 替代 大表join小表：将小表broadcast，避免shuffle</p>
+<p>解决数据倾斜join：将rdd分割成两部分进行join（大量数据的key单独分出来，进行broadcast+map，其他数据照常，最后union）</p>
+<h4 id="cache"><a href="#cache" class="headerlink" title="cache"></a>cache</h4><p>persist原则 树形rdd分叉处persist<br>内存充足时 MEMORY_ONLY<br>稀缺时 MEMORY_ONLY_SER<br>谨慎使用 DISK_ONLY</p>
+<p>unpersist原则 不使用时尽快unpersist</p>
+<h4 id="checkpoint"><a href="#checkpoint" class="headerlink" title="checkpoint"></a>checkpoint</h4><p>截断rdd，并且保存到内存，提高链式rdd(依赖关系特别长)的可靠性</p>
+<h3 id="sparkSQL"><a href="#sparkSQL" class="headerlink" title="sparkSQL"></a>sparkSQL</h3><p><strong>特点</strong></p>
+<p>引入更高级的API（SQLtext  dataframe/dataset）<br>使用高级API时系统会自动优化，例如broadcast</p>
+<p><strong>join</strong></p>
+<p>inner join 大表小表前后顺序无所谓，底层会自动优化（大表为流失遍历表，小表为查找表）<br>left join 左表为流失遍历表，右表为查找表</p>
+<p>关于Dataset常用API，以后再记录。</p>
+<p><strong>官方API文档</strong></p>
+<p><a href="http://spark.apache.org/docs/2.2.1/api/java/org/apache/spark/sql/Dataset.html" target="_blank" rel="noopener">http://spark.apache.org/docs/2.2.1/api/java/org/apache/spark/sql/Dataset.html</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/25/SEM笔记/" rel="next" title="SEM笔记">
+                <i class="fa fa-chevron-left"></i> SEM笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/08/SEM笔记/未命名/" rel="prev" title>
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yvelzhang</p>
+              <p class="site-description motion-element" itemprop="description">喵喵喵</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#sparkCore（RDD）"><span class="nav-number">1.</span> <span class="nav-text">sparkCore（RDD）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#特点"><span class="nav-number">1.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算子"><span class="nav-number">1.2.</span> <span class="nav-text">算子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Scheduler"><span class="nav-number">1.3.</span> <span class="nav-text">Scheduler</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#资源配置"><span class="nav-number">1.4.</span> <span class="nav-text">资源配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#shuffle"><span class="nav-number">1.5.</span> <span class="nav-text">shuffle</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#broadcast"><span class="nav-number">1.6.</span> <span class="nav-text">broadcast</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cache"><span class="nav-number">1.7.</span> <span class="nav-text">cache</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#checkpoint"><span class="nav-number">1.8.</span> <span class="nav-text">checkpoint</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sparkSQL"><span class="nav-number">2.</span> <span class="nav-text">sparkSQL</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yvelzhang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+<div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv" style="display:none">
+    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    <span class="post-meta-divider">|</span>
+</span>
+<span id="busuanzi_container_site_uv" style="display:none">
+    有<span id="busuanzi_value_site_uv"></span>人看过我的博客啦
+</span>
+</div>
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

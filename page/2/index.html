@@ -232,6 +232,1666 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/24/ctr校正/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yvelzhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yvelzhang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/24/ctr校正/" itemprop="url">推荐系统负样本降采样后ctr校正</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-24T20:02:29+08:00">
+                2019-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在训练广告的CTR模型时，训练数据出现严重正负样本不对称，负样本一般是正样本的几十倍。对于这种问题，常用的做法是对负样本进行采样，将采样后的负样本和正样本一起作为训练数据。但是这样的训练数据训练出的模型预测ctr会大于实际ctr。</p>
+<p>目前有两种常用校准方法，分别是<strong>facebook的prior correction方法</strong> 和 <strong>谷歌的weighting方法</strong>，下面是实际广告竞价ctr预估业务中对这两种方法的实践：</p>
+<h2 id="prior-correction-方法"><a href="#prior-correction-方法" class="headerlink" title="prior correction 方法"></a>prior correction 方法</h2><img src="/2019/09/24/ctr校正/image-20190924200916041.png" alt="image-20190924200916041" style="zoom:50%;">
+
+<img src="/2019/09/24/ctr校正/image-20190924201019218.png" alt="image-20190924201019218" style="zoom:50%;">
+
+
+
+<h4 id="校正前："><a href="#校正前：" class="headerlink" title="校正前："></a>校正前：</h4><p>Pctr与实际ctr关系</p>
+<img src="/2019/09/24/ctr校正/image-20190924201153145.png" alt="image-20190924201153145" style="zoom:50%;">
+
+<p>Pctr分布</p>
+<img src="/2019/09/24/ctr校正/image-20190924201247614.png" alt="image-20190924201247614" style="zoom:50%;">
+
+<h4 id="校正后："><a href="#校正后：" class="headerlink" title="校正后："></a>校正后：</h4><p>Pctr 与 ctr关系</p>
+<img src="/2019/09/24/ctr校正/image-20190924201330406.png" alt="image-20190924201330406" style="zoom:50%;">
+
+<p>大于0.2之后曲线抖动剧烈，是因为数据稀疏引起的，绝大部分pctr都预估在0.2以内，可以查看下图pctr分布</p>
+<p>Pctr分布：大于0.2的数量非常少</p>
+<img src="/2019/09/24/ctr校正/image-20190924201427016.png" alt="image-20190924201427016" style="zoom:50%;">
+
+<h2 id="weighting方法"><a href="#weighting方法" class="headerlink" title="weighting方法"></a>weighting方法</h2><p>该方法是在训练模型时，给正负样本设置不同的权重。正样本权重为 1 ，负样本权重1/r。这种方法在模型本身有偏差时鲁棒性强于前者，但是使用FTRL时效果不好，可能的原因是在线学习算法需要样本随机打散，但是weighting策略中的样本权重，一定程度上阻碍了样本随机性</p>
+<p>校正后</p>
+<img src="/2019/09/24/ctr校正/image-20190924201540585.png" alt="image-20190924201540585" style="zoom:50%;">
+
+<img src="/2019/09/24/ctr校正/image-20190924201605023.png" alt="image-20190924201605023" style="zoom:50%;">
+
+<p>使用weighting之后测试集auc下降 (0.74-&gt;0.7)</p>
+<p>因此最后选择prior correction方法</p>
+<h2 id="Facebook校正方法公式推导"><a href="#Facebook校正方法公式推导" class="headerlink" title="Facebook校正方法公式推导"></a>Facebook校正方法公式推导</h2><img src="/2019/09/24/ctr校正/image-20190924201901000.png" alt style="zoom:50%;">
+
+<img src="/2019/09/24/ctr校正/image-20190924201944320.png" alt style="zoom:50%;">
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/24/gbdt-lr/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yvelzhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yvelzhang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/24/gbdt-lr/" itemprop="url">【推荐模型】facebook gbdt+lr ctr预估模型</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-24T19:55:04+08:00">
+                2019-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="评价指标"><a href="#评价指标" class="headerlink" title="评价指标"></a>评价指标</h2><p>评估指标NE（normalizedentropy）。AUC只关注了排序正确程度，而没有关注预测精准度。</p>
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>（a）     SGD-LR和BOPR都适合在线one by one 学习</p>
+<p>（b）     GBDT特征转换优点：自动特征分桶和特征交叉。<strong>实施方式</strong>：每棵树的输出为一个类别特征，进行onehot，训练方式L2-treeboost。<strong>效果</strong>：比单独使用LR或者GBDT提升3%</p>
+<p>（c）     数据新鲜度：训练-测试数据时间间隔越久，误差越高。因此模型每天更新一次。</p>
+<p>（d）     线性分类器：学习率更新per-coordinate learning rate效果最好，参数采用grid search。</p>
+<p>线性分类算法对比：与BOPR相比，LR内存消耗更小，计算更少。</p>
+<h2 id="实时在线数据生成方法"><a href="#实时在线数据生成方法" class="headerlink" title="实时在线数据生成方法"></a>实时在线数据生成方法</h2><p>（a）     一段时间没点击就是负样本，时间段阈值要谨慎选取，否则预估CTR会低于实际值</p>
+<p>（b）     在线训练model，每天发布一次</p>
+<h2 id="训练参数及特征"><a href="#训练参数及特征" class="headerlink" title="训练参数及特征"></a>训练参数及特征</h2><p>（a）     tree_nums：1-2000，超过500之后提升不明显，超过1000效果下降（过拟合）</p>
+<p>（b）     每棵树叶子节点不超过12个（个人认为原因是特征组合不能太复杂，会过拟合）</p>
+<p>（c）     Feature importance: 特征出现的节点平方误差下降累积</p>
+<p>（d）     上下文特征与历史特征</p>
+<p>上下文特征：环境特征（time of day，day of week），对数据新鲜度更敏感</p>
+<p>历史特征：历史点击情况</p>
+<p>对分类而言历史特征作用更大，上下文特征对冷启动更有用</p>
+<h2 id="大规模数据采样及校正"><a href="#大规模数据采样及校正" class="headerlink" title="大规模数据采样及校正"></a>大规模数据采样及校正</h2><p>均匀采样：使用10%数据，效果仅降低1%，无需校正。</p>
+<p>负样本降采样：解决class balance问题，FB最终取0.025，需校正，否则CTR预估偏高。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/23/item2vec/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yvelzhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yvelzhang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/23/item2vec/" itemprop="url">item2vec</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-23T20:50:43+08:00">
+                2019-09-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>该工作借鉴了word2vec的思想，通过“skip-gram with negative sampling（SGNS）”，学习item在低维隐含空间的嵌入表示。item的序列等价于词的序列，将训练样本由句子改为item序列，item是非时间序列的；训练时每次只使用正样本+采样固定数目负样本进行梯度迭代；item间共现为正样本，按照item的概率分布进行负采样。实验结果表明比SVD的效果更好。</p>
+<h2 id="模型与目标函数"><a href="#模型与目标函数" class="headerlink" title="模型与目标函数"></a>模型与目标函数</h2><p>Skip-gram的模型架构：</p>
+<img src="/2019/09/23/item2vec/image-20190923193543300.png" alt="model" style="zoom:50%;">
+
+<p>Skip-gram是利用当前词预测其上下文词。给定一个训练序列<em>w1,w2,w3…wn</em>，模型的目标函数是最大化平均的log概率：</p>
+<img src="/2019/09/23/item2vec/image-20190923193625604.png" alt="image-20190923193625604" style="zoom:50%;">
+
+<p>在skip-gram中，<em>p(wj|wi)</em>利用softmax函数定义如下：</p>
+<img src="/2019/09/23/item2vec/image-20190923193819510.png" alt="image-20190923193819510" style="zoom:67%;">
+
+<p>其中u和v，分别是embedding矩阵和softmax参数矩阵。</p>
+<h2 id="loss"><a href="#loss" class="headerlink" title="loss"></a>loss</h2><p>由于语料库太大直接训练softmax不太现实（同时对所有输出神经元都进行梯度回传计算量太大），了解决这个问题，google提出了两个方法，一个是hierarchical softmax，本文另一个方法是negative sample。negative sample的思想本身源自于对Noise Contrastive Estimation的一个简化，具体的，把目标函数修正为：</p>
+<img src="/2019/09/23/item2vec/image-20190923195532617.png" alt="image-20190923195532617" style="zoom:50%;">
+
+<p><em>Pn(w)</em>是噪声分布 ( noise distribution )。即训练目标是使用Logistic regression区分出目标词和噪音词。具体的<em>Pn(w)</em>方面有些trick，google使用的是power 为0.75的unigram，好于unigram，uniform distribution。</p>
+<p><strong>实际计算中，第一项为正样本项的交叉熵损失，第二项为抽样负样本项的交叉熵损失</strong></p>
+<h2 id="采样"><a href="#采样" class="headerlink" title="采样"></a>采样</h2><p>另外，由于自然语言中很多高频词出现频率极高，但包含的信息量非常小（如’is’ ‘a’ ‘the’）。为了balance低频词和高频词，利用简单的概率丢弃词<em>wi</em>：</p>
+<img src="/2019/09/23/item2vec/image-20190923195816678.png" alt="image-20190923195816678" style="zoom:50%;">
+
+<p>其中<em>f(wi)</em>是<em>wi</em>的词频，t通过实验经验获得。实际中t大约在10^-5附近。</p>
+<h2 id="tensorboard可视化"><a href="#tensorboard可视化" class="headerlink" title="tensorboard可视化"></a>tensorboard可视化</h2><p>embedding结果利用saver打到日志中，启动tensorboard</p>
+<p>启动过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">step1:tensorboard --logdir=path</span><br><span class="line">step2:浏览器打开 http://localhost:6006/</span><br></pre></td></tr></table></figure>
+
+<p>这里的坑：</p>
+<ol>
+<li><p>必须输入绝对路径，否则打开了tensorboard后无法识别内容</p>
+</li>
+<li><p>提示的网址经常打不开，但是访问 <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a> 后能够正常使用</p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/15/hexo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yvelzhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yvelzhang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/15/hexo/" itemprop="url">hexo 基本操作</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-15T16:46:26+08:00">
+                2019-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="发布新文章"><a href="#发布新文章" class="headerlink" title="发布新文章"></a>发布新文章</h2><p><strong>Step1</strong>:  创建新文件 hexo new post 文件名，系统会自动在scaffolds文件夹中搜寻名为post的文件，以其为模板生成md文件，保存在source/_posts下, 然后编辑md文件</p>
+<p><strong>step2</strong>:  编辑完毕后，hexo g 生成静态文件</p>
+<p><strong>Step3</strong>:  hexo s(完整命令为hexo server)，用于启动服务器，主要用来本地预览；完成后打开浏览器输入 localhost:4000，会发现多了你刚写的那篇博客</p>
+<p><strong>Step4</strong>:  hexo d 发布</p>
+<h2 id="清除缓存"><a href="#清除缓存" class="headerlink" title="清除缓存"></a>清除缓存</h2><p>hexo clean</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/02/卷积操作以及参数/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yvelzhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yvelzhang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/02/卷积操作以及参数/" itemprop="url">卷积操作以及padding参数详解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-02T17:20:31+08:00">
+                2018-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="原型"><a href="#原型" class="headerlink" title="原型"></a>原型</h2><pre><code>conv2d(
+input,     #输入tensor
+filter,    #卷积核大小
+strides,   #stride大小
+padding,   #padding方式
+use_cudnn_on_gpu=True, #是否GPU训练
+data_format=&apos;NHWC&apos;,    #数据格式
+name=None  #变量name
+)</code></pre><p>padding的两种参数：<strong>VALID</strong>，<strong>SAME</strong>。</p>
+<p>首先定义基本符号：</p>
+<p>1、输入矩阵 W×W。</p>
+<p>2、filter矩阵 F×F，卷积核</p>
+<p>3、stride值 S，步长</p>
+<p>4、输出宽高为 new_height、new_width</p>
+<h3 id="如果padding-‘VALID’"><a href="#如果padding-‘VALID’" class="headerlink" title="如果padding = ‘VALID’"></a>如果padding = ‘VALID’</h3><p>new_height = new_width = (W – F + 1) / S （结果向上取整）</p>
+<p>conv2d的VALID方式<strong>不会在原有输入的基础上添加新的像素</strong>（假定我们的输入是图片数据，因为只有图片才有像素），输出矩阵的大小直接按照公式计算即可。</p>
+<h3 id="如果padding-‘SAME’"><a href="#如果padding-‘SAME’" class="headerlink" title="如果padding = ‘SAME’"></a>如果padding = ‘SAME’</h3><p>new_height = new_width = W / S （结果向上取整）  </p>
+<p>这种方式会进行补0操作。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/02/summary,tensorboard使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yvelzhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yvelzhang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/02/summary,tensorboard使用/" itemprop="url">summary,tensorboard使用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-02T16:20:31+08:00">
+                2018-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h1><p>将想要查看的信息以及图的信息保存到log中，然后在tensorboard中显示。</p>
+<p><strong>创建</strong>   </p>
+<pre><code>writer = tf.summary.FileWriter(&apos;log&apos;, sess.graph) </code></pre><p>第一个参数是路径，第二个参数是对应的图，第二个参数可不填。  </p>
+<p><strong>记录</strong><br>例如记录loss  </p>
+<pre><code>tf.summary.scalar(‘loss’, loss)  </code></pre><p><strong>合并</strong><br>获得记录所有tensor的操作  </p>
+<pre><code>_summary_op = tf.summary.merge_all()  </code></pre><p>每次迭代时都要执行该操作来获取要监测的信息</p>
+<p><strong>写入log</strong></p>
+<pre><code>writer.add_summary(summary, iter)  </code></pre><p>如果只向log写入图的信息，则只需  </p>
+<pre><code>writer = tf.summary.FileWriter(&apos;log&apos;)
+writer.add_graph(tf.get_default_graph())  </code></pre><h1 id="tensorboard"><a href="#tensorboard" class="headerlink" title="tensorboard"></a>tensorboard</h1><p>打开tensorboard的操作，在cmd中输入：<br>tensorboard –logdir=路径(注意在上下级路径间用双斜杠“//”)</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/03/Dataset API/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yvelzhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yvelzhang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/03/Dataset API/" itemprop="url">Dataset API详解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-03T14:52:31+08:00">
+                2017-11-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="importing-data"><a href="#importing-data" class="headerlink" title="importing data"></a>importing data</h1><p>　　dataset API使您能够从简单、可重用的数据切片中构建复杂的输入管道。例如,一个图像模型的管道可能从分布式文件系统中聚合数据,对每个图像应用随机扰动,并将随机选择图像合并为一个batch进行训练。文本模型的管道可能涉及从原料中提取符号文本数据,将它们转换为嵌入标识符查找表,和不同长度的序列。Dataset API很容易处理大量的数据, 不同的数据格式和复杂的转换。<br>　　Dataset API 向tensorflow中引入了两个新的抽象：<br>　　tf.contrib.data.Dataset 代表一个元素的序列,其中每个元素包含一个或多个张量对象。例如,在一个图像管道中,一个元素可能是一个训练的例子,用一对张量表示图像数据和标签。有两种截然不同的方法来创建一个数据集:</p>
+<ol>
+<li><p>从多个tensor对象中构造 (e.g. Dataset.from_tensor_slices()) </p>
+</li>
+<li><p>从多个tf.contrib.data.Dataset中转化一个dataset (e.g. Dataset.batch())  </p>
+</li>
+</ol>
+<p>　　tf.contrib.data.Iterator 提供了从dataset中提取元素的主要方法。执行此操作时 Iterator.get_next()返回数据集中的下一个元素，通常作为管道与模型之间的接口。最简单的iterator是”one-shot iterator”，它指向一个特定的数据集并且只遍历一次。对于更复杂的应用，Iterator.initializer 操作</p>
+<h1 id="基础教学"><a href="#基础教学" class="headerlink" title="基础教学"></a>基础教学</h1><p>　　这部分的指南描述了创建不同类型的Dataset和iterator对象,以及如何提取数据。<br>　　要开始一个输入管道，首先要定义一个source。例如，要从内存中的tensors中构建一个Dataset，可以用 tf.contrib.data.Dataset. from_tensors()以及f.contrib.data.Dataset. from_tensor_slices()。此外，如果输入数据是磁盘中的TFRecord格式，可以构建tf.contrib. data.TFRecordDataset。<br>　　一旦我们有了Dataset对象，我们可以将它转化为新的Dataset通过tf.contrib.data.Dataset对象。例如，你可以对每个元素应用转换正如Dataset.map()，或者多元素的转换正如Dataset.batch()全部的操作种类请见 <a href="https://www.tensorflow.org/api\_docs/python/tf/contrib/data/Dataset" target="_blank" rel="noopener">https://www.tensorflow.org/api\_docs/python/tf/contrib/data/Dataset</a><br>　　最常用的访问Dataset中元素的方式是使用迭代器，每次只访问一个元素（Dataset.make_one_shot_iterator()），tf.contrib.data.Iterator提供两个操作数，Iterator.initializer用来初始化迭代器的状态；Iterator.get_ next() 返回下一个（批）元素所对应的tf.Tensor。根据你的情况,你可以选择不同类型的迭代器,下面列出了选项。</p>
+<h1 id="Dataset的结构"><a href="#Dataset的结构" class="headerlink" title="Dataset的结构"></a>Dataset的结构</h1><p>　　一个Dataset由多个结构相同的elements组成，每个element有一个或多个tf.tensors对象被称作components。每个component有自己的tf.DType和tf.TensorShape。Dataset.output_types和Dataset.output_shapes被用来观察每个dataset element中每个component的属性和形状，这些嵌套结构的属性映射到结构中的某一个元素,这可能是一个tensor,tensor的元组或嵌套的tensor的元组。例如：</p>
+<pre><code>dataset1 = tf.contrib.data.Dataset.from_tensor_slices(tf.random_uniform([4, 10]))
+print(dataset1.output_types)  # ==&gt; &quot;tf.float32&quot;
+print(dataset1.output_shapes)  # ==&gt; &quot;(10,)&quot;
+
+dataset2 = tf.contrib.data.Dataset.from_tensor_slices(
+   (tf.random_uniform([4]),
+tf.random_uniform([4, 100], maxval=100, dtype=tf.int32)))
+print(dataset2.output_types)  # ==&gt; &quot;(tf.float32, tf.int32)&quot;
+print(dataset2.output_shapes)  # ==&gt; &quot;((), (100,))&quot;
+
+dataset3 = tf.contrib.data.Dataset.zip((dataset1, dataset2))
+print(dataset3.output_types)  # ==&gt; (tf.float32, (tf.float32, tf.int32))
+print(dataset3.output_shapes)  # ==&gt; &quot;(10, ((), (100,)))&quot;</code></pre><p>　　对element中的每个component进行命名是非常方便的。如果它们表示一个训练例子中的不同特征。除了元组，可以使用collections.namedtuple或者字典映射到tensors来表示dataset中的单个element。    </p>
+<pre><code>dataset = tf.contrib.data.Dataset.from_tensor_slices(
+   {&quot;a&quot;: tf.random_uniform([4]),&quot;b&quot;: tf.random_uniform([4, 100], maxval=100, dtype=tf.int32)})  
+print(dataset.output_types)  # ==&gt; &quot;{&apos;a&apos;: tf.float32, &apos;b&apos;: tf.int32}&quot;
+print(dataset.output_shapes)  # ==&gt; &quot;{&apos;a&apos;: (), &apos;b&apos;: (100,)}&quot;
+　　　　</code></pre><p>　　Dataset之间的转化适合任何结构，Dataset.map()，Dataset.flat_ map()和Dataset.filter()转化，表示逐元素地进行映射，元素的结构决定了函数的参数：</p>
+<pre><code>dataset1 = dataset1.map(lambda x: ...)
+
+dataset2 = dataset2.flat_map(lambda x, y: ...)
+
+dataset3 = dataset3.filter(lambda x, (y, z): ...)</code></pre><h1 id="创建迭代器"><a href="#创建迭代器" class="headerlink" title="创建迭代器"></a>创建迭代器</h1><p>　　当为输入数据建立了Dataset后，下一步就是创建迭代器去访问Dataset中的元素，Dataset中的API目前支持三种迭代器：   </p>
+<ul>
+<li><p>one-shot,</p>
+</li>
+<li><p>initializable,</p>
+</li>
+<li><p>reinitializable, and</p>
+</li>
+<li><p>feedable.</p>
+</li>
+</ul>
+<p>　　one-shot迭代器是最简单的迭代器，它只支持遍历一次dataset，且不需要显示的初始化。one-shot迭代器能处理现有基于队列的输入管道所支持的所有情况，但是它不支持参数，例子如下：  </p>
+<pre><code>dataset = tf.contrib.data.Dataset.range(100)
+iterator = dataset.make_one_shot_iterator()
+next_element = iterator.get_next()
+
+for i in range(100):
+  value = sess.run(next_element)
+  assert i == value  </code></pre><p>　　initializable迭代器在使用前需要一个显式的iterator.initializer操作，它使您可以参数化数据集的定义，使用一个或多个tf.placeholder() tensors，当对迭代器进行initialize的时候对这些tensors进行fed操作。例子如下：  </p>
+<pre><code>max_value = tf.placeholder(tf.int64, shape=[])
+dataset = tf.contrib.data.Dataset.range(max_value)
+iterator = dataset.make_initializable_iterator()
+next_element = iterator.get_next()
+
+# Initialize an iterator over a dataset with 10 elements.
+sess.run(iterator.initializer, feed_dict={max_value: 10})
+for i in range(10):
+  value = sess.run(next_element)
+  assert i == value
+
+# Initialize the same iterator over a dataset with 100 elements.
+sess.run(iterator.initializer, feed_dict={max_value: 100})
+for i in range(100):
+  value = sess.run(next_element)
+  assert i == value  </code></pre><p>　　reinitializable迭代器能从多个不同的Dataset对象中进行初始化，例如,你可能有一个训练输入管道,使用随机扰动输入图像提高泛化,以及一个验证输入管道在未修改的数据集上进行评估。这些管道通常会使用不同的Dataset对象，但是这些对象有相同的结构(即每个component都有相同的类型和兼容的形状)。  </p>
+<pre><code> #Define training and validation datasets with the same structure.
+training_dataset = tf.contrib.data.Dataset.range(100).map(
+lambda x: x + tf.random_uniform([], -10, 10, tf.int64))
+validation_dataset = tf.contrib.data.Dataset.range(50)
+
+ #A reinitializable iterator is defined by its structure. We could use the
+ # `output_types` and `output_shapes` properties of either `training_dataset`
+ # or `validation_dataset` here, because they are compatible.
+iterator = Iterator.from_structure(training_dataset.output_types,
+   training_dataset.output_shapes)
+next_element = iterator.get_next()
+
+training_init_op = iterator.make_initializer(training_dataset)
+validation_init_op = iterator.make_initializer(validation_dataset)
+
+ # Run 20 epochs in which the training dataset is traversed, followed by the
+ # validation dataset.
+for _ in range(20):
+  # Initialize an iterator over the training dataset.
+  sess.run(training_init_op)
+  for _ in range(100):
+sess.run(next_element)
+
+  # Initialize an iterator over the validation dataset.
+  sess.run(validation_init_op)
+  for _ in range(50):
+sess.run(next_element)  </code></pre><p>　　feedable迭代器能与tf.placeholder一起使用，来选择每次调用tf.Session.run所使用的迭代器，通过熟悉的feed_dict机制。它提供了reinitializable迭代器相同的功能，但它不需要在一开始初始迭代器，和上面一样的例子作为比较，可以使用tf.contrib.data.Iterator.from_string_handle 来定义一个feedable迭代器实现在两个数据集间进行切换。</p>
+<pre><code>training_dataset = tf.contrib.data.Dataset.range(100).map(
+lambda x: x + tf.random_uniform([], -10, 10, tf.int64)).repeat()
+validation_dataset = tf.contrib.data.Dataset.range(50)
+
+　# A feedable iterator is defined by a handle placeholder and its structure. We
+　# could use the `output_types` and `output_shapes` properties of either
+　# `training_dataset` or `validation_dataset` here, because they have
+　# identical structure.
+handle = tf.placeholder(tf.string, shape=[])
+iterator = tf.contrib.data.Iterator.from_string_handle(
+handle, training_dataset.output_types, training_dataset.output_shapes)
+next_element = iterator.get_next()
+
+　# You can use feedable iterators with a variety of different kinds of iterator
+　# (such as one-shot and initializable iterators).
+training_iterator = training_dataset.make_one_shot_iterator()
+validation_iterator = validation_dataset.make_initializable_iterator()
+
+　# The `Iterator.string_handle()` method returns a tensor that can be evaluated
+　# and used to feed the `handle` placeholder.
+training_handle = sess.run(training_iterator.string_handle())
+validation_handle = sess.run(validation_iterator.string_handle())
+
+　# Loop forever, alternating between training and validation.
+while True:
+  # Run 200 steps using the training dataset. Note that the training dataset is
+  # infinite, and we resume from where we left off in the previous `while` loop
+  # iteration.
+  for _ in range(200):
+sess.run(next_element, feed_dict={handle: training_handle})
+
+  # Run one pass over the validation dataset.
+  sess.run(validation_iterator.initializer)
+  for _ in range(50):
+sess.run(next_element, feed_dict={handle: validation_handle})
+　　</code></pre><h1 id="从迭代器中获得值"><a href="#从迭代器中获得值" class="headerlink" title="从迭代器中获得值"></a>从迭代器中获得值</h1><p>　　使用Iterator.get_next()，每使用一次，迭代器取得下一个元素的值（并不是调用Iterator.get_next()迭代器就会前进，必须要使用所返回的tensor，通过tf.Session.run()来获得下一个值，迭代器才会前进）。<br>　　如果迭代器到达的数据集的末尾，Iterator.get_next()将会返回tf.errors.OutOfRangeError，在这之后迭代器将会进入不安全状态，必须要重新进行初始化才能继续使用。</p>
+<pre><code>dataset = tf.contrib.data.Dataset.range(5)
+iterator = dataset.make_initializable_iterator()
+next_element = iterator.get_next()
+
+　# Typically `result` will be the output of a model, or an optimizer&apos;s
+　# training operation.
+result = tf.add(next_element, next_element)
+
+sess.run(iterator.initializer)
+print(sess.run(result))  # ==&gt; &quot;0&quot;
+print(sess.run(result))  # ==&gt; &quot;2&quot;
+print(sess.run(result))  # ==&gt; &quot;4&quot;
+print(sess.run(result))  # ==&gt; &quot;6&quot;
+print(sess.run(result))  # ==&gt; &quot;8&quot;
+try:
+  sess.run(result)
+except tf.errors.OutOfRangeError:
+  print(&quot;End of dataset&quot;)  # ==&gt; &quot;End of dataset&quot;　</code></pre><p>　　通用模式为：  </p>
+<pre><code>sess.run(iterator.initializer)
+while True:
+  try:
+sess.run(result)
+  except tf.errors.OutOfRangeError:
+break  </code></pre><p>　　如果dataset中的每个元素都有嵌套结构，Iterator.get_next()返回的tensors也具有相同的嵌套结构。  </p>
+<pre><code>dataset1 = tf.contrib.data.Dataset.from_tensor_slices(tf.random_uniform([4, 10]))
+dataset2 = tf.contrib.data.Dataset.from_tensor_slices((tf.random_uniform([4]), tf.random_uniform([4, 100])))
+dataset3 = tf.contrib.data.Dataset.zip((dataset1, dataset2))
+
+iterator = dataset3.make_initializable_iterator()
+
+sess.run(iterator.initializer)
+next1, (next2, next3) = iterator.get_next()  </code></pre><h1 id="读取输入值"><a href="#读取输入值" class="headerlink" title="读取输入值"></a>读取输入值</h1><h3 id="读numpy数组"><a href="#读numpy数组" class="headerlink" title="读numpy数组"></a>读numpy数组</h3><p>　　如果数据都保存在内存中，最简单的办法就是从数据直接创建Dataset然后将它们转换为tensor对象，使用Dataset.from_tensor_slices()。 </p>
+<pre><code>with np.load(&quot;/var/data/training_data.npy&quot;) as data:  
+features = data[&quot;features&quot;]
+labels = data[&quot;labels&quot;]
+assert features.shape[0] == labels.shape[0]
+dataset = tf.data.Dataset.from_tensor_slices((features, labels))</code></pre><p>　　要注意的是，以上代码将会把features和labels数组嵌入到graph中，类似tf.constant()操作，这种操作对于小数据还好，但是很浪费内存，因为数组中的内容会被复制好多次，可能会触及tf.GraphDef protocol buffer中2GB的上限。<br>　　可以使用tf.placeholder()tensors来定义Dataset，然后在初始化迭代器的时候对数组进行feed。  </p>
+<pre><code> # Load the training data into two NumPy arrays, for example using `np.load()`.
+with np.load(&quot;/var/data/training_data.npy&quot;) as data:
+  features = data[&quot;features&quot;]
+  labels = data[&quot;labels&quot;]
+
+ # Assume that each row of `features` corresponds to the same row as `labels`.
+assert features.shape[0] == labels.shape[0]
+
+features_placeholder = tf.placeholder(features.dtype, features.shape)
+labels_placeholder = tf.placeholder(labels.dtype, labels.shape)
+
+dataset = tf.data.Dataset.from_tensor_slices((features_placeholder, labels_placeholder))
+ # [Other transformations on `dataset`...]
+dataset = ...
+iterator = dataset.make_initializable_iterator()
+
+sess.run(iterator.initializer, feed_dict={features_placeholder: features,
+labels_placeholder: labels})  </code></pre><h3 id="读取TFRecord数据"><a href="#读取TFRecord数据" class="headerlink" title="读取TFRecord数据"></a>读取TFRecord数据</h3><p> 　　tf.data.TFRecordDataset类能使用一个或多个TFRecord作为输入管道  </p>
+<pre><code> # Creates a dataset that reads all of the examples from two files.
+filenames = [&quot;/var/data/file1.tfrecord&quot;, &quot;/var/data/file2.tfrecord&quot;]
+dataset = tf.data.TFRecordDataset(filenames)  </code></pre><p>　　TFRecordDataset的初始化参数filenames能够是一个string、一个string的列表、或者一个string的tenser。如果有训练和验证两部分文件，可以使用tf.placeholder(tf.string)，在初始化迭代器的时候使用合适的文件名：  </p>
+<pre><code>filenames = tf.placeholder(tf.string, shape=[None])
+dataset = tf.data.TFRecordDataset(filenames)
+dataset = dataset.map(...)  # Parse the record into tensors.
+dataset = dataset.repeat()  # Repeat the input indefinitely.
+dataset = dataset.batch(32)
+iterator = dataset.make_initializable_iterator()
+
+ # You can feed the initializer with the appropriate filenames for the current
+ # phase of execution, e.g. training vs. validation.
+
+ # Initialize `iterator` with training data.
+training_filenames = [&quot;/var/data/file1.tfrecord&quot;, &quot;/var/data/file2.tfrecord&quot;]
+sess.run(iterator.initializer, feed_dict={filenames: training_filenames})
+
+ # Initialize `iterator` with validation data.
+validation_filenames = [&quot;/var/data/validation1.tfrecord&quot;, ...]
+sess.run(iterator.initializer, feed_dict={filenames: validation_filenames})</code></pre><h3 id="读取文本数据"><a href="#读取文本数据" class="headerlink" title="读取文本数据"></a>读取文本数据</h3><p>　　许多数据集分布在一个或者多个文本文件中，tf.data.TextLineDataset 提供了一个简单的方法从多个文本文件中读取行数据。只需提供一个或者多个文件名，TextLineDataset就能逐行产生这些文件的string格式的元素值。类似TFRecordDataset，TextLineDataset也能接受filenames以tensors的形式，因此能够通过tf.placeholder(tf.string)实现参数化。  </p>
+<pre><code>filenames = [&quot;/var/data/file1.txt&quot;, &quot;/var/data/file2.txt&quot;]
+dataset = tf.data.TextLineDataset(filenames)    </code></pre><p>　　TextLineDataset所提取的每一行数据可能并不理想，例如文件始于标题行，或者含有注释。这些行能被Dataset.skip()或者Dataset.filter()移除。要对每个文件单独的使用这些操作，可以使用Dataset.flat_map()来对每个文件创建嵌套的Dataset。  </p>
+<pre><code>filenames = [&quot;/var/data/file1.txt&quot;, &quot;/var/data/file2.txt&quot;]
+
+dataset = tf.data.Dataset.from_tensor_slices(filenames)
+
+ # Use `Dataset.flat_map()` to transform each file as a separate nested dataset,
+ # and then concatenate their contents sequentially into a single &quot;flat&quot; dataset.
+ # * Skip the first line (header row).
+ # * Filter out lines beginning with &quot;#&quot; (comments).
+dataset = dataset.flat_map(
+lambda filename: (
+tf.data.TextLineDataset(filename)
+.skip(1)
+.filter(lambda line: tf.not_equal(tf.substr(line, 0, 1), &quot;#&quot;))))  </code></pre><p>　　完整例子请见： <a href="https://github.com/tensorflow/tensorflow/blob/r1.4/tensorflow/examples/get_started/regression/imports85.py" target="_blank" rel="noopener">https://github.com/tensorflow/tensorflow/blob/r1.4/tensorflow/examples/get_started/regression/imports85.py</a></p>
+<h1 id="使用Dataset-map-来处理数据"><a href="#使用Dataset-map-来处理数据" class="headerlink" title="使用Dataset.map()来处理数据"></a>使用Dataset.map()来处理数据</h1><p>　　Dataset.map(f)对输入Dataset中的每个元素应用所给的函数来生成新的Dataset。函数f输入tensor对象，该tensors表示输入dataset中单个元素，返回tensor对象，表示输出dataset中的单个元素。下面是几个常用例子：</p>
+<h3 id="解析-protocol-buffer-messages"><a href="#解析-protocol-buffer-messages" class="headerlink" title="解析 protocol buffer messages"></a>解析 protocol buffer messages</h3><p>　　许多输入管道从TFRecord-format文件中提取protocol buffer messages，每条记录中包括多个features，输入管道通常将这些特征转化为tensors。  </p>
+<pre><code> # Transforms a scalar string `example_proto` into a pair of a scalar string and
+ # a scalar integer, representing an image and its label, respectively.
+def _parse_function(example_proto):
+  features = {&quot;image&quot;: tf.FixedLenFeature((), tf.string, default_value=&quot;&quot;),
+  &quot;label&quot;: tf.FixedLenFeature((), tf.int32, default_value=0)}
+  parsed_features = tf.parse_single_example(example_proto, features)
+  return parsed_features[&quot;image&quot;], parsed_features[&quot;label&quot;]
+
+ # Creates a dataset that reads all of the examples from two files, and extracts
+ # the image and label features.
+filenames = [&quot;/var/data/file1.tfrecord&quot;, &quot;/var/data/file2.tfrecord&quot;]
+dataset = tf.data.TFRecordDataset(filenames)
+dataset = dataset.map(_parse_function)</code></pre><h3 id="解析图像数据并且resize"><a href="#解析图像数据并且resize" class="headerlink" title="解析图像数据并且resize"></a>解析图像数据并且resize</h3><p>　　当使用图像数据训练神经网络时，将不同大小的图像归一化为相同大小是很有必要的。</p>
+<pre><code>def _parse_function(filename, label):
+  image_string = tf.read_file(filename)
+  image_decoded = tf.image.decode_image(image_string)
+  image_resized = tf.image.resize_images(image_decoded, [28, 28])
+  return image_resized, label
+
+# A vector of filenames.
+filenames = tf.constant([&quot;/var/data/image1.jpg&quot;, &quot;/var/data/image2.jpg&quot;, ...])
+
+　# `labels[i]` is the label for the image in `filenames[i].
+labels = tf.constant([0, 37, ...])
+
+dataset = tf.data.Dataset.from_tensor_slices((filenames, labels))
+dataset = dataset.map(_parse_function)  </code></pre><h3 id="通过tf-py-func-使用任意python逻辑"><a href="#通过tf-py-func-使用任意python逻辑" class="headerlink" title="通过tf.py_func()使用任意python逻辑"></a>通过tf.py_func()使用任意python逻辑</h3><p>　　由于性能的原因，尽量使用tensorflow操作来处理数据，但是某些时候使用外部python库也是有用的，通过在Dataset.map()中调用tf.py_func()。  </p>
+<pre><code>import cv2
+ # Use a custom OpenCV function to read the image, instead of the standard
+ # TensorFlow `tf.read_file()` operation.
+def _read_py_function(filename, label):
+  image_decoded = cv2.imread(image_string, cv2.IMREAD_GRAYSCALE)
+  return image_decoded, label
+
+ # Use standard TensorFlow operations to resize the image to a fixed shape.
+def _resize_function(image_decoded, label):
+  image_decoded.set_shape([None, None, None])
+  image_resized = tf.image.resize_images(image_decoded, [28, 28])
+  return image_resized, label
+
+filenames = [&quot;/var/data/image1.jpg&quot;, &quot;/var/data/image2.jpg&quot;, ...]
+labels = [0, 37, 29, 1, ...]
+
+dataset = tf.data.Dataset.from_tensor_slices((filenames, labels))
+dataset = dataset.map(
+lambda filename, label: tuple(tf.py_func(
+_read_py_function, [filename, label], [tf.uint8, label.dtype])))
+dataset = dataset.map(_resize_function)  </code></pre><h1 id="dataset-elements批量"><a href="#dataset-elements批量" class="headerlink" title="dataset elements批量"></a>dataset elements批量</h1><h3 id="Simple-batching"><a href="#Simple-batching" class="headerlink" title="Simple batching"></a>Simple batching</h3><p>　　最简单的batching方式就是将dataset中n个连续的元素堆叠成单个元素，使用Dataset.batch()，与tf.stack()有相同的约束。应用于elements中的每一部分。　　</p>
+<pre><code>inc_dataset = tf.data.Dataset.range(100)
+dec_dataset = tf.data.Dataset.range(0, -100, -1)
+dataset = tf.data.Dataset.zip((inc_dataset, dec_dataset))
+batched_dataset = dataset.batch(4)
+
+iterator = batched_dataset.make_one_shot_iterator()
+next_element = iterator.get_next()
+
+print(sess.run(next_element))  # ==&gt; ([0, 1, 2,   3],   [ 0, -1,  -2,  -3])
+print(sess.run(next_element))  # ==&gt; ([4, 5, 6,   7],   [-4, -5,  -6,  -7])
+print(sess.run(next_element))  # ==&gt; ([8, 9, 10, 11],   [-8, -9, -10, -11])　　</code></pre><h3 id="Batching-tensors-with-padding"><a href="#Batching-tensors-with-padding" class="headerlink" title="Batching tensors with padding"></a>Batching tensors with padding</h3><p>　　以上例子的tensors是大小相同的，然而许多工作的输入数据大小并不一样，为了解决这种情况，Dataset.padded_batch()能对不同size的tensor进行batch，需要指定需要进行pad的维度。  </p>
+<pre><code>dataset = tf.data.Dataset.range(100)
+dataset = dataset.map(lambda x: tf.fill([tf.cast(x, tf.int32)], x))
+dataset = dataset.padded_batch(4, padded_shapes=[None])
+
+iterator = dataset.make_one_shot_iterator()
+next_element = iterator.get_next()
+
+print(sess.run(next_element))  # ==&gt; [[0, 0, 0], [1, 0, 0], [2, 2, 0], [3, 3, 3]]
+print(sess.run(next_element))  # ==&gt; [[4, 4, 4, 4, 0, 0, 0],
+   #  [5, 5, 5, 5, 5, 0, 0],
+   #  [6, 6, 6, 6, 6, 6, 0],
+   #  [7, 7, 7, 7, 7, 7, 7]]　　</code></pre><p>　　Dataset.padded_batch()允许在不同的维度进行不同的pad，长度可以是可变的或者是固定的，padding value可以被重写，默认值为0.</p>
+<h1 id="训练过程"><a href="#训练过程" class="headerlink" title="训练过程"></a>训练过程</h1><h3 id="Processing-multiple-epochs"><a href="#Processing-multiple-epochs" class="headerlink" title="Processing multiple epochs"></a>Processing multiple epochs</h3><p>　　Dataset API 提供了两种主要方式来处理相同数据的多次epoch。<br>　　在多次epoch中迭代整个数据集最简单的方式是Dataset.repeat() 。举个例子，创建一个dataset，对输入重复进行了十次epoch。  </p>
+<pre><code>filenames = [&quot;/var/data/file1.tfrecord&quot;, &quot;/var/data/file2.tfrecord&quot;]
+dataset = tf.data.TFRecordDataset(filenames)
+dataset = dataset.map(...)
+dataset = dataset.repeat(10)
+dataset = dataset.batch(32)  </code></pre><p>　　应用Dataset.repeat()不输入参数时将会无限的重复输入，此外这个函数没有epoch结束和开始的信号。<br>　　如果希望在每个epoch结束的时候收到信号，可以用如下写法：</p>
+<pre><code>filenames = [&quot;/var/data/file1.tfrecord&quot;, &quot;/var/data/file2.tfrecord&quot;]
+dataset = tf.data.TFRecordDataset(filenames)
+dataset = dataset.map(...)
+dataset = dataset.batch(32)
+iterator = dataset.make_initializable_iterator()
+next_element = iterator.get_next()
+
+ # Compute for 100 epochs.
+for _ in range(100):
+  sess.run(iterator.initializer)
+  while True:
+try:
+  sess.run(next_element)
+except tf.errors.OutOfRangeError:
+  break
+
+   # [Perform end-of-epoch calculations here.]</code></pre><h3 id="Randomly-shuffling-input-data"><a href="#Randomly-shuffling-input-data" class="headerlink" title="Randomly shuffling input data"></a>Randomly shuffling input data</h3><p>　　Dataset.shuffle()随机洗牌输入数据，使用和tf.RandomShuffleQueue类似的算法：它维持一个固定大小的buffer，每次从buffer中随机选择一个元素作为下一个元素。  </p>
+<pre><code>filenames = [&quot;/var/data/file1.tfrecord&quot;, &quot;/var/data/file2.tfrecord&quot;]
+dataset = tf.data.TFRecordDataset(filenames)
+dataset = dataset.map(...)
+dataset = dataset.shuffle(buffer_size=10000)
+dataset = dataset.batch(32)
+dataset = dataset.repeat()  </code></pre><h3 id="使用高级API"><a href="#使用高级API" class="headerlink" title="使用高级API"></a>使用高级API</h3><p>　　tf.train.MonitoredTrainingSession API简化了在分布式环境中运行tensorflow的许多方面，它使用tf.errors.OutOfRangeError 来表示训练完成，因此推荐与Dataset.make_one_shot_iterator()一起使用，例如：  </p>
+<pre><code>filenames = [&quot;/var/data/file1.tfrecord&quot;, &quot;/var/data/file2.tfrecord&quot;]
+dataset = tf.data.TFRecordDataset(filenames)
+dataset = dataset.map(...)
+dataset = dataset.shuffle(buffer_size=10000)
+dataset = dataset.batch(32)
+dataset = dataset.repeat(num_epochs)
+iterator = dataset.make_one_shot_iterator()
+
+next_example, next_label = iterator.get_next()
+loss = model_function(next_example, next_label)
+
+training_op = tf.train.AdagradOptimizer(...).minimize(loss)
+
+with tf.train.MonitoredTrainingSession(...) as sess:
+  while not sess.should_stop():
+sess.run(training_op)  </code></pre><p>　　在tf.estimator.Estimator中使用Dataset作为input_fn时，也推荐使用Dataset.make_one_shot_iterator()，例如： </p>
+<pre><code>def dataset_input_fn():
+  filenames = [&quot;/var/data/file1.tfrecord&quot;, &quot;/var/data/file2.tfrecord&quot;]
+  dataset = tf.data.TFRecordDataset(filenames)
+
+  # Use `tf.parse_single_example()` to extract data from a `tf.Example`
+  # protocol buffer, and perform any additional per-record preprocessing.
+  def parser(record):
+keys_to_features = {
+&quot;image_data&quot;: tf.FixedLenFeature((), tf.string, default_value=&quot;&quot;),
+&quot;date_time&quot;: tf.FixedLenFeature((), tf.int64, default_value=&quot;&quot;),
+&quot;label&quot;: tf.FixedLenFeature((), tf.int64,
+default_value=tf.zeros([], dtype=tf.int64)),
+}
+parsed = tf.parse_single_example(record, keys_to_features)
+
+# Perform additional preprocessing on the parsed data.
+image = tf.decode_jpeg(parsed[&quot;image_data&quot;])
+image = tf.reshape(image, [299, 299, 1])
+label = tf.cast(parsed[&quot;label&quot;], tf.int32)
+
+return {&quot;image_data&quot;: image, &quot;date_time&quot;: parsed[&quot;date_time&quot;]}, label
+
+  # Use `Dataset.map()` to build a pair of a feature dictionary and a label
+  # tensor for each example.
+  dataset = dataset.map(parser)
+  dataset = dataset.shuffle(buffer_size=10000)
+  dataset = dataset.batch(32)
+  dataset = dataset.repeat(num_epochs)
+  iterator = dataset.make_one_shot_iterator()
+
+  # `features` is a dictionary in which each value is a batch of values for
+  # that feature; `labels` is a batch of labels.
+  features, labels = iterator.get_next()
+  return features, labels</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/24/tensorflow initializer种类/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yvelzhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yvelzhang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/24/tensorflow initializer种类/" itemprop="url">tensorflow initializer种类</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-24T14:36:31+08:00">
+                2017-10-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>1、tf.constant_initializer()</strong></p>
+<p>也可以简写为tf.Constant()</p>
+<p>初始化为常数，这个非常有用，通常偏置项就是用它初始化的。</p>
+<p>由它衍生出的两个初始化方法：</p>
+<p>　　　　a、tf.zeros_initializer()， 也可以简写为tf.Zeros()</p>
+<p>　　　　b、tf.ones_initializer(), 也可以简写为tf.Ones()</p>
+<p>例：在卷积层中，将偏置项b初始化为0，则有多种写法：</p>
+<p>conv1 = tf.layers.conv2d(batch_images, filters=64,<br> kernel_size=7,  strides=2,activation=tf.nn.relu,<br>　kernel_initializer=tf.TruncatedNormal(stddev=0.01)，<br> bias_initializer=tf.Constant(0)) </p>
+<p>或者：<br>　　　　bias_initializer=tf.constant_initializer(0)<br>或者：<br>　　　　bias_initializer=tf.zeros_initializer()<br>或者：<br>　　　　bias_initializer=tf.Zeros()</p>
+<p>例：如何将W初始化成拉普拉斯算子？
+　　　   </p>
+<pre><code>　value = [1, 1, 1, 1, -8, 1, 1, 1，1]
+init = tf.constant_initializer(value)  
+　W= tf.get_variable(‘W‘, shape=[3, 3],initializer=init)</code></pre><p><strong>2、tf.truncated_normal_initializer()</strong></p>
+<p>或者简写为tf.TruncatedNormal()</p>
+<p>生成截断正态分布的随机数，这个初始化方法好像在tf中用得比较多。</p>
+<p>它有四个参数（mean=0.0, stddev=1.0, seed=None, dtype=dtypes.float32)，分别用于指定均值、标准差、随机数种子和随机数的数据类型，一般只需要设置stddev这一个参数就可以了。</p>
+<p>例：</p>
+<pre><code>conv1 = tf.layers.conv2d(batch_images,
+ filters=64,  
+ kernel_size=7,
+ strides=2,
+ activation=tf.nn.relu,
+ kernel_initializer=tf.TruncatedNormal(stddev=0.01)
+ bias_initializer=tf.Constant(0),
+)</code></pre><p>或者：</p>
+<pre><code>conv1 = tf.layers.conv2d(batch_images, 
+ filters=64,
+ kernel_size=7,
+ strides=2,
+ activation=tf.nn.relu,
+ kernel_initializer=tf.truncated_normal_initializer(stddev=0.01)
+ bias_initializer=tf.zero_initializer(),
+)</code></pre><p><strong>3、tf.random_normal_initializer()</strong></p>
+<p>可简写为 tf.RandomNormal()</p>
+<p>生成标准正态分布的随机数，参数和truncated_normal_initializer一样。</p>
+<p><strong>4、random_uniform_initializer = RandomUniform()</strong></p>
+<p>可简写为tf.RandomUniform()</p>
+<p>生成均匀分布的随机数，参数有四个（minval=0, maxval=None, seed=None, dtype=dtypes.float32)，分别用于指定最小值，最大值，随机数种子和类型。</p>
+<p><strong>5、tf.uniform_unit_scaling_initializer()</strong></p>
+<p>可简写为tf.UniformUnitScaling()</p>
+<p>和均匀分布差不多，只是这个初始化方法不需要指定最小最大值，是通过计算出来的。参数为（factor=1.0, seed=None, dtype=dtypes.float32)</p>
+<p>max_val = math.sqrt(3 / input_size) * factor<br>这里的input_size是指输入数据的维数，假设输入为x, 运算为x * W，则input_size= W.shape[0]</p>
+<p>它的分布区间为[ -max_val, max_val]</p>
+<p><strong>6、tf.variance_scaling_initializer()</strong></p>
+<p>可简写为tf.VarianceScaling()</p>
+<p>参数为（scale=1.0,mode=”fan_in”,distribution=”normal”,seed=None，dtype=dtypes.float32)</p>
+<p>scale: 缩放尺度（正浮点数）</p>
+<p>mode:  “fan_in”, “fan_out”, “fan_avg”中的一个，用于计算标准差stddev的值。</p>
+<p>distribution：分布类型，”normal”或“uniform”中的一个。</p>
+<p>当 distribution=”normal” 的时候，生成truncated normal   distribution（截断正态分布） 的随机数，其中stddev = sqrt(scale / n) ，n的计算与mode参数有关。</p>
+<p>如果mode = “fan_in”， n为输入单元的结点数；         </p>
+<p>如果mode = “fan_out”，n为输出单元的结点数；</p>
+<p>如果mode = “fan_avg”,n为输入和输出单元结点数的平均值。</p>
+<p>当distribution=”uniform”的时候 ，生成均匀分布的随机数，假设分布区间为[-limit, limit]，则</p>
+<p>　　　　　　　　　　limit = sqrt(3 * scale / n)</p>
+<p><strong>7、tf.orthogonal_initializer()</strong></p>
+<p>简写为tf.Orthogonal()</p>
+<p>生成正交矩阵的随机数。</p>
+<p>当需要生成的参数是2维时，这个正交矩阵是由均匀分布的随机数矩阵经过SVD分解而来。</p>
+<p><strong>8、tf.glorot_uniform_initializer()</strong></p>
+<p>也称之为Xavier uniform initializer，由一个均匀分布（uniform distribution)来初始化数据。</p>
+<p>假设均匀分布的区间是[-limit, limit],则</p>
+<p>　　　　　　　　　limit=sqrt(6 / (fan_in + fan_out))</p>
+<p>其中的fan_in和fan_out分别表示输入单元的结点数和输出单元的结点数。</p>
+<p><strong>9、glorot_normal_initializer（）</strong></p>
+<p>也称之为 Xavier normal initializer. 由一个 truncated normal distribution来初始化数据.</p>
+<p>　　　　　　　　stddev = sqrt(2 / (fan_in + fan_out))</p>
+<p>其中的fan_in和fan_out分别表示输入单元的结点数和输出单元的结点数。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/24/variable collections/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yvelzhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yvelzhang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/24/variable collections/" itemprop="url">variable collections、regularizer</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-24T14:06:31+08:00">
+                2017-10-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>tensorflow的collection提供一个全局的存储机制，不会受到变量名生存空间的影响。一处保存，到处可取。即创建变量的时候可以指定集合，从集合中能一次性取出所有变量(list)。</p>
+<p>　<em>tf.add_to_collection<em>：</em>把变量放入一个集合，把很多变量变成一个列表</em><br>　<em>tf.get_collection<em>：</em>从一个集合中取出全部变量，是一个列表</em> </p>
+<p>tf.Variable有两个默认的collection<br>　<em>tf.GraphKeys.GLOBAL_VARIABLES</em> –所有设备共享的全局变量<br>　　<em>tf.GraphKeys.TRAINABLE_VARIABLES</em> –<em>用来计算梯度的变量</em>  </p>
+<p>如果不想变量是可训练的，将它加入tf.GraphKeys.LOCAL_VARIABLES　　</p>
+<pre><code>my_local = tf.get_variable(&quot;my_local&quot;, shape=(), collections=[tf.GraphKeys.LOCAL_VARIABLES])  </code></pre><p>或者  </p>
+<pre><code>my_non_trainable = tf.get_variable(&quot;my_non_trainable&quot;, shape=(),trainable=False) </code></pre><p>同样也能创建自己的collection  </p>
+<pre><code>tf.add_to_collection(&quot;my_collection_name&quot;, my_local)  </code></pre><p>取出collection中的所有变量    </p>
+<pre><code>tf.get_collection(&quot;my_collection_name&quot;)  </code></pre><p><strong>regularizer</strong>    </p>
+<p>可以看到get_variable函数的参数中有一个regularizer参数，这里可以输入一个正则化方法，比如</p>
+<pre><code>regularizer = tf.contrib.layers.l2_regularizer(weight_decay)
+return tf.get_variable(name,
+   shape=shape,
+   initializer=initializer,
+   dtype=dtype,
+   regularizer=regularizer,
+   collections=collections,
+   trainable=trainable)</code></pre><p>表示将创建的variable添加到collection tf.GraphKeys.REGULARIZATION_LOSSES中，即该variable会被用来做正则化。若该variable不需要正则化，则regularizer参数设置为None。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/23/tensorflow变量创建/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -397,7 +2057,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -410,7 +2070,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -449,7 +2109,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="回归,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="损失函数：L1，L2，huber，log-cosh，quantile，gamma 评估指标：mse，rmse，mae，mape 损失函数L1（又称MAE）  如果对所有样本点只给出一个预测值，那么这个值就是所有目标值的中位数。优点：  对异常值具有较好鲁棒性  缺点：  梯度不变是个严重问题，即使对于很小的损失，梯度也很大，不利于模型收敛（比如神经网络），常使用变化的学习率解决，或者使用huber">
+<meta name="keywords" content="回归">
+<meta property="og:type" content="article">
+<meta property="og:title" content="回归问题常用的各种损失函数和评估指标">
+<meta property="og:url" content="http://yoursite.com/2020/03/11/回归问题中的各种损失函数/index.html">
+<meta property="og:site_name" content="yvelzhang">
+<meta property="og:description" content="损失函数：L1，L2，huber，log-cosh，quantile，gamma 评估指标：mse，rmse，mae，mape 损失函数L1（又称MAE）  如果对所有样本点只给出一个预测值，那么这个值就是所有目标值的中位数。优点：  对异常值具有较好鲁棒性  缺点：  梯度不变是个严重问题，即使对于很小的损失，梯度也很大，不利于模型收敛（比如神经网络），常使用变化的学习率解决，或者使用huber">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311145739046.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311145816310.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311155538130.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311161547867.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311161646504.png">
+<meta property="og:image" content="http://yoursite.com/Users/yifeizhang/Library/Application%20Support/typora-user-images/image-20200311163244042.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311165930000.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311170137928.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311170441005.png">
+<meta property="og:image" content="http://yoursite.com/Users/yifeizhang/Library/Application%20Support/typora-user-images/image-20200311171821899.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311172144716.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311172900880.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311184606276.png">
+<meta property="og:updated_time" content="2020-03-11T11:37:50.404Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="回归问题常用的各种损失函数和评估指标">
+<meta name="twitter:description" content="损失函数：L1，L2，huber，log-cosh，quantile，gamma 评估指标：mse，rmse，mae，mape 损失函数L1（又称MAE）  如果对所有样本点只给出一个预测值，那么这个值就是所有目标值的中位数。优点：  对异常值具有较好鲁棒性  缺点：  梯度不变是个严重问题，即使对于很小的损失，梯度也很大，不利于模型收敛（比如神经网络），常使用变化的学习率解决，或者使用huber">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311145739046.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/11/回归问题中的各种损失函数/">
+
+
+
+
+
+  <title>回归问题常用的各种损失函数和评估指标 | yvelzhang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yvelzhang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/11/回归问题中的各种损失函数/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yvelzhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yvelzhang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">回归问题常用的各种损失函数和评估指标</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-11T14:46:31+08:00">
+                2020-03-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span id="busuanzi_value_page_pv"></span>次阅读
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>损失函数：L1，L2，huber，log-cosh，quantile，gamma</p>
+<p>评估指标：mse，rmse，mae，mape</p>
+<h1 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h1><h2 id="L1（又称MAE）"><a href="#L1（又称MAE）" class="headerlink" title="L1（又称MAE）"></a>L1（又称MAE）</h2><img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311145739046.png" alt="image-20200311145739046" style="zoom:50%;">
+
+<p>如果对所有样本点只给出一个预测值，那么这个值就是所有目标值的中位数。<br>优点：</p>
+<ul>
+<li>对异常值具有较好鲁棒性</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>梯度不变是个严重问题，即使对于很小的损失，梯度也很大，不利于模型收敛（比如神经网络），常使用变化的学习率解决，或者使用huber损失</li>
+</ul>
+<h2 id="L2（又称MSE）"><a href="#L2（又称MSE）" class="headerlink" title="L2（又称MSE）"></a>L2（又称MSE）</h2><img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311145816310.png" alt="image-20200311145816310" style="zoom:50%;">
+
+<p>回归问题中最常见的损失函数。如果对所有样本点只给出一个预测值，那么这个值就是所有目标值的平均值。<br>优点：</p>
+<ul>
+<li>计算方便，逻辑清晰，衡量误差较准确</li>
+<li>梯度随着误差增大或减小，收敛效果好</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>对异常点(离群值)敏感，异常点会产生较大的损失，模型追求对异常点预估准确从而牺牲整体精度。特别是对于长尾分布的数据（小数值占一大部分，同时会有长尾的大数值），长尾数据产生较大的loss，导致模型过于关注少量长尾数据，从而对于其他数据预估精度降低。</li>
+</ul>
+<p>例如某用户付费数据分布，大量用户付费在0附近，但是也会有较长的尾部数据，对于这种数据集使用L2，会导致模型倾向于准确预估高付费用户，低付费用户预估精度低，因此推荐使用L1损失：</p>
+<img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311155538130.png" alt="image-20200311155538130" style="zoom: 33%;">
+
+<p><strong>L1和L2对比：</strong>对异常值而言，中位数比均值更加鲁棒，因此MAE对于异常值也比MSE更稳定</p>
+<h2 id="huber"><a href="#huber" class="headerlink" title="huber"></a>huber</h2><img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311161547867.png" alt="image-20200311161547867" style="zoom:50%;">
+
+<img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311161646504.png" alt="image-20200311161646504" style="zoom: 33%;">
+
+<p>当误差在[0-δ,0+δ]之间时，等价为MSE，而在[-∞,δ]和[δ,+∞]时为MAE<br>优点：</p>
+<ul>
+<li>对异常值更加鲁棒</li>
+<li>在最优点附近由于调整为MSE，梯度更新会随着误差减小而减小，有利于收敛</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>引入额外的超参，需要调试</li>
+<li>临界点delta处不可导</li>
+</ul>
+<h2 id="log-cosh"><a href="#log-cosh" class="headerlink" title="log-cosh"></a>log-cosh</h2><img src="/Users/yifeizhang/Library/Application Support/typora-user-images/image-20200311163244042.png" alt="image-20200311163244042" style="zoom:50%;">
+
+<p>比MSE更加平滑的损失函数，对于较小的x，log(cosh(x))近似等于(x^2)/2，对于较大的x，近似等于abs(x)-log(2)。这意味着log-cosh基本类似于均方误差，但不易受到异常点的影响。它具有Huber损失所有的优点，但不同于Huber损失的是，log-cosh二阶处处可微。。<br>优点：</p>
+<ul>
+<li>具有huber损失具备的所有优点（不受异常点影响，处处可微）</li>
+<li>二阶处处可微，许多机器学习算法采用牛顿法逼近最优点，比如鼎鼎大名的XGBoost算法，而牛顿法要求损失函数二阶可微。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>误差很大情况下，一阶梯度和Hessian会变成定值，导致XGBoost出现缺少分裂点的情况。</li>
+</ul>
+<p>二阶可微的好处：凸优化求最小值的充要条件是一阶导数为0，二阶导数＞0。</p>
+<h3 id="Quantile-Loss（分位数损失）"><a href="#Quantile-Loss（分位数损失）" class="headerlink" title="Quantile Loss（分位数损失）"></a>Quantile Loss（分位数损失）</h3><p>通常的回归算法是拟合训练数据的期望或者中位数，而使用分位数损失函数可以通过给定不同的分位点，拟合训练数据的不同分位数。分位数回归提出的原因，就是因为不希望仅仅是研究y的期望，而是希望能探索y的<strong>完整分布</strong>状况，或者说可能在某些情况下我们更希望了解y在给定x情况下的某个分位数</p>
+<img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311165930000.png" alt="image-20200311165930000" style="zoom: 50%;">
+
+<img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311170137928.png" alt="image-20200311170137928" style="zoom:50%;">
+
+<p>该函数是一个分段函数，𝛾为分位数系数，𝑦为真实值，𝑓(𝑥)为预测值。根据预测值和真实值的大小，分两种情况来开考虑。𝑦&gt;𝑓(𝑥)为高估，预测值比真实值大；𝑦&lt;𝑓(𝑥)为低估，预测值比真实值小，<strong>使用不同过得系数来控制高估和低估在整个损失值的权重</strong> 。</p>
+<p>特别的，当𝛾=0.5时，分位数损失退化为平均绝对误差MAE，也可以将MAE看成是分位数损失的一个特例 - 中位数损失。下图是取不同的中位点[0.25,0.5,0.7]得到不同的分位数损失函数的曲线，也可以看出0.5时就是MAE。</p>
+<img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311170441005.png" alt="image-20200311170441005" style="zoom: 33%;">
+
+<h1 id="评估指标"><a href="#评估指标" class="headerlink" title="评估指标"></a>评估指标</h1><h2 id="mse，rmse"><a href="#mse，rmse" class="headerlink" title="mse，rmse"></a>mse，rmse</h2><p>MSE: 等效于L2损失，用MSE来评估算法精度时会对离群值敏感，追求对离群值预估准确从而牺牲整体精度，公式如下：</p>
+<img src="/Users/yifeizhang/Library/Application Support/typora-user-images/image-20200311171821899.png" alt="image-20200311171821899" style="zoom:25%;">
+
+<p>RMSE：MSE开根号，本质上和MSE没区别，只是为了数量级与真实数据相同，更容易理解。</p>
+<h2 id="mae"><a href="#mae" class="headerlink" title="mae"></a>mae</h2><img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311172144716.png" alt="image-20200311172144716" style="zoom:25%;">
+
+<p>等效于L1损失，用该值评估算法精度能解决MSE对离群值敏感的问题。</p>
+<h2 id="mape"><a href="#mape" class="headerlink" title="mape"></a>mape</h2><p>平均绝对百分比误差（Mean Absolute Percentage Error）</p>
+<img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311172900880.png" alt="image-20200311172900880" style="zoom:50%;">
+
+<h2 id="R2"><a href="#R2" class="headerlink" title="R2"></a>R2</h2><img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311184606276.png" alt="image-20200311184606276" style="zoom:33%;">
+
+<p>其中，分子部分表示真实值与预测值的平方差之和，类似于均方差 MSE；分母部分表示真实值与均值的平方差之和，类似于方差 Var。根据 R-Squared 的取值，来判断模型的好坏，其取值范围为[0,1]：</p>
+<p>如果结果是 0，说明模型拟合效果很差；如果结果是 1，说明模型无错误。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/回归/" rel="tag"># 回归</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/17/模型融合blending和stack/" rel="next" title="集成学习blending和stacking">
+                <i class="fa fa-chevron-left"></i> 集成学习blending和stacking
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/20/lightgbm原理解读/" rel="prev" title="lightgbm原理解读">
+                lightgbm原理解读 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yvelzhang</p>
+              <p class="site-description motion-element" itemprop="description">喵喵喵</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#损失函数"><span class="nav-number">1.</span> <span class="nav-text">损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#L1（又称MAE）"><span class="nav-number">1.1.</span> <span class="nav-text">L1（又称MAE）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#L2（又称MSE）"><span class="nav-number">1.2.</span> <span class="nav-text">L2（又称MSE）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#huber"><span class="nav-number">1.3.</span> <span class="nav-text">huber</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#log-cosh"><span class="nav-number">1.4.</span> <span class="nav-text">log-cosh</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Quantile-Loss（分位数损失）"><span class="nav-number">1.4.1.</span> <span class="nav-text">Quantile Loss（分位数损失）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#评估指标"><span class="nav-number">2.</span> <span class="nav-text">评估指标</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mse，rmse"><span class="nav-number">2.1.</span> <span class="nav-text">mse，rmse</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mae"><span class="nav-number">2.2.</span> <span class="nav-text">mae</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mape"><span class="nav-number">2.3.</span> <span class="nav-text">mape</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#R2"><span class="nav-number">2.4.</span> <span class="nav-text">R2</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yvelzhang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+<div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv" style="display:none">
+    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    <span class="post-meta-divider">|</span>
+</span>
+<span id="busuanzi_container_site_uv" style="display:none">
+    有<span id="busuanzi_value_site_uv"></span>人看过我的博客啦
+</span>
+</div>
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
