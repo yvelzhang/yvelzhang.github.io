@@ -86,16 +86,16 @@
 <meta property="og:site_name" content="yvelzhang">
 <meta property="og:description" content="集成学习主要范围如下，本篇主要讲blending和stacking：   1.blending（1）uniform blending 最终结果是各个子学习器结果的投票（分类问题）或平均（回归问题），各个子学习器的结果具有相同权重。 （2）linear blending  最终结果是各个子学习器（上图中的M1 M2…MM）结果的加权叠加，各个子学习器的结果具有不同权重，通过再训练一个线性模型（上图中">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/模型融合blending和stack/image-20200217163456322.png">
-<meta property="og:image" content="http://yoursite.com/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88blending%E5%92%8Cstack/image-20200217164808032.png">
-<meta property="og:image" content="http://yoursite.com/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/模型融合blending和stack/image-20200217195553120.png">
-<meta property="og:image" content="http://yoursite.com/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88blending%E5%92%8Cstack/image-20200217200632015.png">
-<meta property="og:image" content="http://yoursite.com/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/模型融合blending和stack/image-20200217200656391.png">
-<meta property="og:updated_time" content="2020-02-17T12:10:55.555Z">
+<meta property="og:image" content="http://yoursite.com/2020/02/17/模型融合blending和stack/image-20200217163456322.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/17/模型融合blending和stack/image-20200217164808032.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/17/模型融合blending和stack/image-20200217195553120.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/17/模型融合blending和stack/image-20200217200632015.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/17/模型融合blending和stack/image-20200217200656391.png">
+<meta property="og:updated_time" content="2020-03-21T09:40:39.265Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="集成学习blending和stacking">
 <meta name="twitter:description" content="集成学习主要范围如下，本篇主要讲blending和stacking：   1.blending（1）uniform blending 最终结果是各个子学习器结果的投票（分类问题）或平均（回归问题），各个子学习器的结果具有相同权重。 （2）linear blending  最终结果是各个子学习器（上图中的M1 M2…MM）结果的加权叠加，各个子学习器的结果具有不同权重，通过再训练一个线性模型（上图中">
-<meta name="twitter:image" content="http://yoursite.com/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/模型融合blending和stack/image-20200217163456322.png">
+<meta name="twitter:image" content="http://yoursite.com/2020/02/17/模型融合blending和stack/image-20200217163456322.png">
 
 
 
@@ -311,12 +311,12 @@
 
       
         <p>集成学习主要范围如下，本篇主要讲blending和stacking：</p>
-<img src="/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/模型融合blending和stack/image-20200217163456322.png" alt="image-20200217163456322" style="zoom:50%;">
+<img src="/2020/02/17/模型融合blending和stack/image-20200217163456322.png" alt="image-20200217163456322" style="zoom:50%;">
 
 <h3 id="1-blending"><a href="#1-blending" class="headerlink" title="1.blending"></a>1.blending</h3><p>（1）uniform blending</p>
 <p>最终结果是各个子学习器结果的投票（分类问题）或平均（回归问题），各个子学习器的结果具有相同权重。</p>
 <p>（2）linear blending</p>
-<p><img src="/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88blending%E5%92%8Cstack/image-20200217164808032.png" alt="image-20200217164808032"></p>
+<p><img src="/2020/02/17/模型融合blending和stack/image-20200217164808032.png" alt="image-20200217164808032"></p>
 <p>最终结果是各个子学习器（上图中的M1 M2…MM）结果的加权叠加，各个子学习器的结果具有不同权重，通过再训练一个线性模型（上图中的M0）来学习各个子模型的权重（子模型的输出即为第二层线性模型的输入特征）</p>
 <p><strong>将原始的训练数据集按照一定的比例分为训练数据集DT和验证(或者说测试)数据集DA，算法训练过程如下：</strong></p>
 <p>假设要构建M个模型M1，M2，……MM。以模型Mi为例说明：对训练数据集DT进行学习，得到模型Mi。学习完毕后对验证数据DA的计算结果为DA_Mi，对预测数据集合的计算结果为DP_Mi。待M个模型全部建立完成后：</p>
@@ -329,7 +329,7 @@
 <p>与linear blending相似，唯一不同是子模型的权重可以由任何模型（不一定要是线性模型）来进行训练。</p>
 <h3 id="2-stacking"><a href="#2-stacking" class="headerlink" title="2.stacking"></a>2.stacking</h3><p>代码参考（<a href="https://blog.csdn.net/zgj_gutou/article/details/88598934）" target="_blank" rel="noopener">https://blog.csdn.net/zgj_gutou/article/details/88598934）</a></p>
 <p>结构示意如下：</p>
-<img src="/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/模型融合blending和stack/image-20200217195553120.png" alt="image-20200217195553120" style="zoom: 50%;">
+<img src="/2020/02/17/模型融合blending和stack/image-20200217195553120.png" alt="image-20200217195553120" style="zoom: 50%;">
 
 <p>这里我们用二分类的例子做介绍。<br>例如我们用 RandomForestClassifier, ExtraTreesClassifier, GradientBoostingClassifier 作为第一层学习器（当然这里我们可以添加更多的分类器，也可以用不同的特征组合但是同样的学习方法作为基分类器）：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">clfs = [</span><br><span class="line">        RandomForestClassifier(n_estimators = n_trees, criterion = <span class="string">'gini'</span>),</span><br><span class="line">        ExtraTreesClassifier(n_estimators = n_trees * 2, criterion = <span class="string">'gini'</span>),</span><br><span class="line">        GradientBoostingClassifier(n_estimators = n_trees),</span><br><span class="line">    ]</span><br></pre></td></tr></table></figure>
@@ -341,9 +341,9 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">blend_train = np.zeros((X_dev.shape[0], len(clfs))) # Number of training data x Number of classifiers</span><br><span class="line">blend_test = np.zeros((X_test.shape[0], len(clfs))) # Number of testing data x Number of classifiers</span><br></pre></td></tr></table></figure>
 
 <p>按照上面说的，blend_train基于下面的方法得到，注意，下图是对于一个分类器来说的，所以每个分类器得到的blend_train的行数与用于训练的数据一样多，所以blend_train的shape为X_dev.shape[0]*len(clfs)，即训练集长度 * 基分类器个数：</p>
-<p><img src="/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88blending%E5%92%8Cstack/image-20200217200632015.png" alt="image-20200217200632015"></p>
+<p><img src="/2020/02/17/模型融合blending和stack/image-20200217200632015.png" alt="image-20200217200632015"></p>
 <p>而对于第二轮的测试集blend_test来说，由于每次交叉验证的过程中都要进行一次预测，假设我们是5折交叉验证，那么对于每个分类器来说，得到的blend_test的shape是测试集行数 * 交叉验证折数，此时的做法是，对axis=1方向取平均值，以得到测试集行数 * 1 的测试数据，所以总的blend_test就是测试集行数 * 基分类器个数，可以跟blend_train保持一致：</p>
-<img src="/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/模型融合blending和stack/image-20200217200656391.png" alt="image-20200217200656391" style="zoom:50%;">
+<img src="/2020/02/17/模型融合blending和stack/image-20200217200656391.png" alt="image-20200217200656391" style="zoom:50%;">
 
 <p>得到blend_train 和 blend_test的代码如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> j, clf <span class="keyword">in</span> enumerate(clfs):</span><br><span class="line">        <span class="built_in">print</span> <span class="string">'Training classifier [%s]'</span> % (j)</span><br><span class="line">        blend_test_j = np.zeros((X_test.shape[0], len(skf))) <span class="comment"># Number of testing data x Number of folds , we will take the mean of the predictions later</span></span><br><span class="line">        <span class="keyword">for</span> i, (train_index, cv_index) <span class="keyword">in</span> enumerate(skf):</span><br><span class="line">            <span class="built_in">print</span> <span class="string">'Fold [%s]'</span> % (i)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># This is the training and validation set</span></span><br><span class="line">            X_train = X_dev[train_index]</span><br><span class="line">            Y_train = Y_dev[train_index]</span><br><span class="line">            X_cv = X_dev[cv_index]</span><br><span class="line">            Y_cv = Y_dev[cv_index]</span><br><span class="line">            </span><br><span class="line">            clf.fit(X_train, Y_train)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># This output will be the basis for our blended classifier to train against,</span></span><br><span class="line">            <span class="comment"># which is also the output of our classifiers</span></span><br><span class="line">            blend_train[cv_index, j] = clf.predict(X_cv)</span><br><span class="line">            blend_test_j[:, i] = clf.predict(X_test)</span><br><span class="line">        <span class="comment"># Take the mean of the predictions of the cross validation set</span></span><br><span class="line">        blend_test[:, j] = blend_test_j.mean(1)</span><br></pre></td></tr></table></figure>
@@ -383,8 +383,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/08/SEM笔记/未命名/" rel="next" title>
-                <i class="fa fa-chevron-left"></i> 
+              <a href="/2019/11/01/spark知识点/" rel="next" title="spark知识点">
+                <i class="fa fa-chevron-left"></i> spark知识点
               </a>
             
           </div>
@@ -472,7 +472,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

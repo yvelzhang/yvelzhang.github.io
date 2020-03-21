@@ -479,7 +479,7 @@
           
             <p>论文：<a href="http://103.95.217.77/papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision-tree.pdf" target="_blank" rel="noopener">http://103.95.217.77/papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision-tree.pdf</a></p>
 <p>源码：<a href="https://github.com/microsoft/LightGBM" target="_blank" rel="noopener">https://github.com/microsoft/LightGBM</a></p>
-<p>GBDT原理解读：</p>
+<p>GBDT原理解读：<a href="http://yvelzhang.site/2020/03/20/GBDT%E5%8E%9F%E7%90%86%E8%A7%A3%E8%AF%BB/" target="_blank" rel="noopener">http://yvelzhang.site/2020/03/20/GBDT%E5%8E%9F%E7%90%86%E8%A7%A3%E8%AF%BB/</a></p>
 
           
         
@@ -603,7 +603,7 @@
           
             <p>损失函数：L1，L2，huber，log-cosh，quantile，gamma</p>
 <p>评估指标：mse，rmse，mae，mape</p>
-<h1 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h1><h2 id="L1（又称MAE）"><a href="#L1（又称MAE）" class="headerlink" title="L1（又称MAE）"></a>L1（又称MAE）</h2><img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311145739046.png" alt="image-20200311145739046" style="zoom:50%;">
+<h1 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h1><h2 id="L1（又称MAE）"><a href="#L1（又称MAE）" class="headerlink" title="L1（又称MAE）"></a>L1（又称MAE）</h2><img src="/2020/03/11/回归问题中的各种损失函数/image-20200311145739046.png" alt="image-20200311145739046" style="zoom:50%;">
 
 <p>如果对所有样本点只给出一个预测值，那么这个值就是所有目标值的中位数。<br>优点：</p>
 <ul>
@@ -613,7 +613,7 @@
 <ul>
 <li>梯度不变是个严重问题，即使对于很小的损失，梯度也很大，不利于模型收敛（比如神经网络），常使用变化的学习率解决，或者使用huber损失</li>
 </ul>
-<h2 id="L2（又称MSE）"><a href="#L2（又称MSE）" class="headerlink" title="L2（又称MSE）"></a>L2（又称MSE）</h2><img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311145816310.png" alt="image-20200311145816310" style="zoom:50%;">
+<h2 id="L2（又称MSE）"><a href="#L2（又称MSE）" class="headerlink" title="L2（又称MSE）"></a>L2（又称MSE）</h2><img src="/2020/03/11/回归问题中的各种损失函数/image-20200311145816310.png" alt="image-20200311145816310" style="zoom:50%;">
 
 <p>回归问题中最常见的损失函数。如果对所有样本点只给出一个预测值，那么这个值就是所有目标值的平均值。<br>优点：</p>
 <ul>
@@ -625,12 +625,12 @@
 <li>对异常点(离群值)敏感，异常点会产生较大的损失，模型追求对异常点预估准确从而牺牲整体精度。特别是对于长尾分布的数据（小数值占一大部分，同时会有长尾的大数值），长尾数据产生较大的loss，导致模型过于关注少量长尾数据，从而对于其他数据预估精度降低。</li>
 </ul>
 <p>例如某用户付费数据分布，大量用户付费在0附近，但是也会有较长的尾部数据，对于这种数据集使用L2，会导致模型倾向于准确预估高付费用户，低付费用户预估精度低，因此推荐使用L1损失：</p>
-<img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311155538130.png" alt="image-20200311155538130" style="zoom: 33%;">
+<img src="/2020/03/11/回归问题中的各种损失函数/image-20200311155538130.png" alt="image-20200311155538130" style="zoom: 33%;">
 
 <p><strong>L1和L2对比：</strong>对异常值而言，中位数比均值更加鲁棒，因此MAE对于异常值也比MSE更稳定</p>
-<h2 id="huber"><a href="#huber" class="headerlink" title="huber"></a>huber</h2><img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311161547867.png" alt="image-20200311161547867" style="zoom:50%;">
+<h2 id="huber"><a href="#huber" class="headerlink" title="huber"></a>huber</h2><img src="/2020/03/11/回归问题中的各种损失函数/image-20200311161547867.png" alt="image-20200311161547867" style="zoom:50%;">
 
-<img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311161646504.png" alt="image-20200311161646504" style="zoom: 33%;">
+<img src="/2020/03/11/回归问题中的各种损失函数/image-20200311161646504.png" alt="image-20200311161646504" style="zoom: 33%;">
 
 <p>当误差在[0-δ,0+δ]之间时，等价为MSE，而在[-∞,δ]和[δ,+∞]时为MAE<br>优点：</p>
 <ul>
@@ -642,7 +642,7 @@
 <li>引入额外的超参，需要调试</li>
 <li>临界点delta处不可导</li>
 </ul>
-<h2 id="log-cosh"><a href="#log-cosh" class="headerlink" title="log-cosh"></a>log-cosh</h2><img src="/Users/yifeizhang/Library/Application Support/typora-user-images/image-20200311163244042.png" alt="image-20200311163244042" style="zoom:50%;">
+<h2 id="log-cosh"><a href="#log-cosh" class="headerlink" title="log-cosh"></a>log-cosh</h2><img src="/2020/03/11/回归问题中的各种损失函数/image-20200311163244042.png" alt="image-20200311163244042" style="zoom:50%;">
 
 <p>比MSE更加平滑的损失函数，对于较小的x，log(cosh(x))近似等于(x^2)/2，对于较大的x，近似等于abs(x)-log(2)。这意味着log-cosh基本类似于均方误差，但不易受到异常点的影响。它具有Huber损失所有的优点，但不同于Huber损失的是，log-cosh二阶处处可微。。<br>优点：</p>
 <ul>
@@ -655,25 +655,25 @@
 </ul>
 <p>二阶可微的好处：凸优化求最小值的充要条件是一阶导数为0，二阶导数＞0。</p>
 <h3 id="Quantile-Loss（分位数损失）"><a href="#Quantile-Loss（分位数损失）" class="headerlink" title="Quantile Loss（分位数损失）"></a>Quantile Loss（分位数损失）</h3><p>通常的回归算法是拟合训练数据的期望或者中位数，而使用分位数损失函数可以通过给定不同的分位点，拟合训练数据的不同分位数。分位数回归提出的原因，就是因为不希望仅仅是研究y的期望，而是希望能探索y的<strong>完整分布</strong>状况，或者说可能在某些情况下我们更希望了解y在给定x情况下的某个分位数</p>
-<img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311165930000.png" alt="image-20200311165930000" style="zoom: 50%;">
+<img src="/2020/03/11/回归问题中的各种损失函数/image-20200311165930000.png" alt="image-20200311165930000" style="zoom: 50%;">
 
-<img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311170137928.png" alt="image-20200311170137928" style="zoom:50%;">
+<img src="/2020/03/11/回归问题中的各种损失函数/image-20200311170137928.png" alt="image-20200311170137928" style="zoom:50%;">
 
 <p>该函数是一个分段函数，𝛾为分位数系数，𝑦为真实值，𝑓(𝑥)为预测值。根据预测值和真实值的大小，分两种情况来开考虑。𝑦&gt;𝑓(𝑥)为高估，预测值比真实值大；𝑦&lt;𝑓(𝑥)为低估，预测值比真实值小，<strong>使用不同过得系数来控制高估和低估在整个损失值的权重</strong> 。</p>
 <p>特别的，当𝛾=0.5时，分位数损失退化为平均绝对误差MAE，也可以将MAE看成是分位数损失的一个特例 - 中位数损失。下图是取不同的中位点[0.25,0.5,0.7]得到不同的分位数损失函数的曲线，也可以看出0.5时就是MAE。</p>
-<img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311170441005.png" alt="image-20200311170441005" style="zoom: 33%;">
+<img src="/2020/03/11/回归问题中的各种损失函数/image-20200311170441005.png" alt="image-20200311170441005" style="zoom: 33%;">
 
 <h1 id="评估指标"><a href="#评估指标" class="headerlink" title="评估指标"></a>评估指标</h1><h2 id="mse，rmse"><a href="#mse，rmse" class="headerlink" title="mse，rmse"></a>mse，rmse</h2><p>MSE: 等效于L2损失，用MSE来评估算法精度时会对离群值敏感，追求对离群值预估准确从而牺牲整体精度，公式如下：</p>
-<img src="/Users/yifeizhang/Library/Application Support/typora-user-images/image-20200311171821899.png" alt="image-20200311171821899" style="zoom:25%;">
+<img src="/2020/03/11/回归问题中的各种损失函数/image-20200311171821899.png" alt="image-20200311171821899" style="zoom:25%;">
 
 <p>RMSE：MSE开根号，本质上和MSE没区别，只是为了数量级与真实数据相同，更容易理解。</p>
-<h2 id="mae"><a href="#mae" class="headerlink" title="mae"></a>mae</h2><img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311172144716.png" alt="image-20200311172144716" style="zoom:25%;">
+<h2 id="mae"><a href="#mae" class="headerlink" title="mae"></a>mae</h2><img src="/2020/03/11/回归问题中的各种损失函数/image-20200311172144716.png" alt="image-20200311172144716" style="zoom:25%;">
 
 <p>等效于L1损失，用该值评估算法精度能解决MSE对离群值敏感的问题。</p>
 <h2 id="mape"><a href="#mape" class="headerlink" title="mape"></a>mape</h2><p>平均绝对百分比误差（Mean Absolute Percentage Error）</p>
-<img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311172900880.png" alt="image-20200311172900880" style="zoom:50%;">
+<img src="/2020/03/11/回归问题中的各种损失函数/image-20200311172900880.png" alt="image-20200311172900880" style="zoom:50%;">
 
-<h2 id="R2"><a href="#R2" class="headerlink" title="R2"></a>R2</h2><img src="/2020/03/11/回归问题中的各种损失函数/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/回归问题中的各种损失函数/image-20200311184606276.png" alt="image-20200311184606276" style="zoom:33%;">
+<h2 id="R2"><a href="#R2" class="headerlink" title="R2"></a>R2</h2><img src="/2020/03/11/回归问题中的各种损失函数/image-20200311184606276.png" alt="image-20200311184606276" style="zoom:33%;">
 
 <p>其中，分子部分表示真实值与预测值的平方差之和，类似于均方差 MSE；分母部分表示真实值与均值的平方差之和，类似于方差 Var。根据 R-Squared 的取值，来判断模型的好坏，其取值范围为[0,1]：</p>
 <p>如果结果是 0，说明模型拟合效果很差；如果结果是 1，说明模型无错误。</p>
@@ -799,12 +799,12 @@
         
           
             <p>集成学习主要范围如下，本篇主要讲blending和stacking：</p>
-<img src="/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/模型融合blending和stack/image-20200217163456322.png" alt="image-20200217163456322" style="zoom:50%;">
+<img src="/2020/02/17/模型融合blending和stack/image-20200217163456322.png" alt="image-20200217163456322" style="zoom:50%;">
 
 <h3 id="1-blending"><a href="#1-blending" class="headerlink" title="1.blending"></a>1.blending</h3><p>（1）uniform blending</p>
 <p>最终结果是各个子学习器结果的投票（分类问题）或平均（回归问题），各个子学习器的结果具有相同权重。</p>
 <p>（2）linear blending</p>
-<p><img src="/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88blending%E5%92%8Cstack/image-20200217164808032.png" alt="image-20200217164808032"></p>
+<p><img src="/2020/02/17/模型融合blending和stack/image-20200217164808032.png" alt="image-20200217164808032"></p>
 <p>最终结果是各个子学习器（上图中的M1 M2…MM）结果的加权叠加，各个子学习器的结果具有不同权重，通过再训练一个线性模型（上图中的M0）来学习各个子模型的权重（子模型的输出即为第二层线性模型的输入特征）</p>
 <p><strong>将原始的训练数据集按照一定的比例分为训练数据集DT和验证(或者说测试)数据集DA，算法训练过程如下：</strong></p>
 <p>假设要构建M个模型M1，M2，……MM。以模型Mi为例说明：对训练数据集DT进行学习，得到模型Mi。学习完毕后对验证数据DA的计算结果为DA_Mi，对预测数据集合的计算结果为DP_Mi。待M个模型全部建立完成后：</p>
@@ -817,7 +817,7 @@
 <p>与linear blending相似，唯一不同是子模型的权重可以由任何模型（不一定要是线性模型）来进行训练。</p>
 <h3 id="2-stacking"><a href="#2-stacking" class="headerlink" title="2.stacking"></a>2.stacking</h3><p>代码参考（<a href="https://blog.csdn.net/zgj_gutou/article/details/88598934）" target="_blank" rel="noopener">https://blog.csdn.net/zgj_gutou/article/details/88598934）</a></p>
 <p>结构示意如下：</p>
-<img src="/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/模型融合blending和stack/image-20200217195553120.png" alt="image-20200217195553120" style="zoom: 50%;">
+<img src="/2020/02/17/模型融合blending和stack/image-20200217195553120.png" alt="image-20200217195553120" style="zoom: 50%;">
 
 <p>这里我们用二分类的例子做介绍。<br>例如我们用 RandomForestClassifier, ExtraTreesClassifier, GradientBoostingClassifier 作为第一层学习器（当然这里我们可以添加更多的分类器，也可以用不同的特征组合但是同样的学习方法作为基分类器）：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">clfs = [</span><br><span class="line">        RandomForestClassifier(n_estimators = n_trees, criterion = <span class="string">'gini'</span>),</span><br><span class="line">        ExtraTreesClassifier(n_estimators = n_trees * 2, criterion = <span class="string">'gini'</span>),</span><br><span class="line">        GradientBoostingClassifier(n_estimators = n_trees),</span><br><span class="line">    ]</span><br></pre></td></tr></table></figure>
@@ -829,9 +829,9 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">blend_train = np.zeros((X_dev.shape[0], len(clfs))) # Number of training data x Number of classifiers</span><br><span class="line">blend_test = np.zeros((X_test.shape[0], len(clfs))) # Number of testing data x Number of classifiers</span><br></pre></td></tr></table></figure>
 
 <p>按照上面说的，blend_train基于下面的方法得到，注意，下图是对于一个分类器来说的，所以每个分类器得到的blend_train的行数与用于训练的数据一样多，所以blend_train的shape为X_dev.shape[0]*len(clfs)，即训练集长度 * 基分类器个数：</p>
-<p><img src="/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88blending%E5%92%8Cstack/image-20200217200632015.png" alt="image-20200217200632015"></p>
+<p><img src="/2020/02/17/模型融合blending和stack/image-20200217200632015.png" alt="image-20200217200632015"></p>
 <p>而对于第二轮的测试集blend_test来说，由于每次交叉验证的过程中都要进行一次预测，假设我们是5折交叉验证，那么对于每个分类器来说，得到的blend_test的shape是测试集行数 * 交叉验证折数，此时的做法是，对axis=1方向取平均值，以得到测试集行数 * 1 的测试数据，所以总的blend_test就是测试集行数 * 基分类器个数，可以跟blend_train保持一致：</p>
-<img src="/2020/02/17/模型融合blending和stack/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/模型融合blending和stack/image-20200217200656391.png" alt="image-20200217200656391" style="zoom:50%;">
+<img src="/2020/02/17/模型融合blending和stack/image-20200217200656391.png" alt="image-20200217200656391" style="zoom:50%;">
 
 <p>得到blend_train 和 blend_test的代码如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> j, clf <span class="keyword">in</span> enumerate(clfs):</span><br><span class="line">        <span class="built_in">print</span> <span class="string">'Training classifier [%s]'</span> % (j)</span><br><span class="line">        blend_test_j = np.zeros((X_test.shape[0], len(skf))) <span class="comment"># Number of testing data x Number of folds , we will take the mean of the predictions later</span></span><br><span class="line">        <span class="keyword">for</span> i, (train_index, cv_index) <span class="keyword">in</span> enumerate(skf):</span><br><span class="line">            <span class="built_in">print</span> <span class="string">'Fold [%s]'</span> % (i)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># This is the training and validation set</span></span><br><span class="line">            X_train = X_dev[train_index]</span><br><span class="line">            Y_train = Y_dev[train_index]</span><br><span class="line">            X_cv = X_dev[cv_index]</span><br><span class="line">            Y_cv = Y_dev[cv_index]</span><br><span class="line">            </span><br><span class="line">            clf.fit(X_train, Y_train)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># This output will be the basis for our blended classifier to train against,</span></span><br><span class="line">            <span class="comment"># which is also the output of our classifiers</span></span><br><span class="line">            blend_train[cv_index, j] = clf.predict(X_cv)</span><br><span class="line">            blend_test_j[:, i] = clf.predict(X_test)</span><br><span class="line">        <span class="comment"># Take the mean of the predictions of the cross validation set</span></span><br><span class="line">        blend_test[:, j] = blend_test_j.mean(1)</span><br></pre></td></tr></table></figure>
@@ -848,127 +848,6 @@
 <p>上面的代码修改的主要就是blend_train和blend_test的shape，可以看到，对于多分类问题来说，二者的第二维的shape不再是基分类器的数量，而是class的数量*基分类器的数量，这是大家要注意的，否则可能不会得到我们想要的结果。</p>
 <h3 id="3-Stacking-和-blending的区别"><a href="#3-Stacking-和-blending的区别" class="headerlink" title="3.Stacking 和 blending的区别"></a>3.Stacking 和 blending的区别</h3><p>bending和stacking的区别：Blending的主要区别在于训练集不是通过K-Fold的CV策略来获得预测值从而生成第二阶段模型的特征，而是建立一个Holdout集，例如10%的训练数据，第二阶段的stacker模型就基于第一阶段模型对这10%训练数据的预测值进行拟合</p>
 
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/08/SEM笔记/未命名/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="yvelzhang">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="yvelzhang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/08/SEM笔记/未命名/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-08T20:12:16+08:00">
-                2019-11-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
           
         
       
@@ -1139,203 +1018,6 @@
 <p>关于Dataset常用API，以后再记录。</p>
 <p><strong>官方API文档</strong></p>
 <p><a href="http://spark.apache.org/docs/2.2.1/api/java/org/apache/spark/sql/Dataset.html" target="_blank" rel="noopener">http://spark.apache.org/docs/2.2.1/api/java/org/apache/spark/sql/Dataset.html</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/25/SEM笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="yvelzhang">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="yvelzhang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/25/SEM笔记/" itemprop="url">SEM笔记</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-25T15:46:06+08:00">
-                2019-10-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>sem出价，广告展现排名根据出价的竞得排名来确定</p>
-<p><strong>关键词价格调整策略</strong></p>
-<ol>
-<li>离成交近的词高出价</li>
-<li>精确匹配高出价，宽匹配低出价</li>
-<li>根据地域转化强弱出价</li>
-<li>根据时段和终端，这个就是好的时段可以提高点出价，就是拉时段系数比例，另外PC和YD端也是要区分开来跑的</li>
-<li>根据排名，转化率效果好的词，排名较低，可适当提价</li>
-</ol>
-<p>品牌词：防守策略，点击率高，一般出价高</p>
-<p>竞品词：点击率低，一般出价低</p>
-<p>类型词：点击率低，一般出价低</p>
-<p><strong>百度现有出价策略：</strong></p>
-<p>排名倾向：设定排名目标与出价范围，在范围内达成目标</p>
-<p>排名胜出：设定对手url与出价范围，在范围内压制对手</p>
-<p>点击最大化：在出价范围内，最大化点击</p>
-<p><strong>缺点是无法和最终效果数据关联起来</strong></p>
-<p><strong>应用宝sem策略：</strong></p>
-<img src="/2019/10/25/SEM笔记/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/SEM笔记/image-20191028144300296.png" alt="image-20191028144300296" style="zoom: 25%;">
-
-<p><strong>单个关键词收益最大化出价策略：</strong></p>
-<p>边际收益&gt;0   寻找能拿到首位的最低出价</p>
-<p>边际收益&lt;0   降低出价至边际收益大于0</p>
-<p>（我们可以用CPA来替换其中的收益）</p>
-<p><strong>拓词：</strong>基于NLP语义泛化拓词</p>
-<p><strong>应用宝SEM闭环框架</strong>：</p>
-<p><img src="/2019/10/25/SEM笔记/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/SEM%E7%AC%94%E8%AE%B0/image-20191028145940294.png" alt="image-20191028145940294"></p>
-<p>我们的投放目标：在CPA可接受的条件下，尽可能多的带量</p>
-<p>目标拆解：</p>
-<p>a. 品牌词:  降成本</p>
-<p>​    头部词：价格向下试探，保排名，保量；</p>
-<p>​    非头部词（点击率低，出价高）：降价或关停，降低成本</p>
-<p>b. 非品牌词： 提量（成本范围内）</p>
-<p>​    头部词：向上提价，带更多量（发掘头部非品牌词）</p>
-<p>​    非头部词（点击率低）：降价或关停，降低CPA成本</p>
-<p>对无点击的词提高出价，使之积累一定的点击</p>
-<p>利用点击数据试探对手的出价</p>
-<h3 id="调价"><a href="#调价" class="headerlink" title="调价"></a>调价</h3><h4 id="品牌词：保排名，降低成本"><a href="#品牌词：保排名，降低成本" class="headerlink" title="品牌词：保排名，降低成本"></a><strong>品牌词：保排名，降低成本</strong></h4><p>设置：排名r，初始出价p0，设置出价上限pu，出价下限pd</p>
-<p>输入参数：</p>
-<p>​            品牌词ID</p>
-<p>​            每个词前一日出价，展现/点击数据，平均点击价格，平均排名，所在计划，所在单元            </p>
-<p>​            </p>
-<p>每日调整，基于前一日数据：</p>
-<p>for（every word）</p>
-<p>{</p>
-<p>​       if（排名 高于 r） 向下调价 0.2</p>
-<p>​       if（排名 低于 r） 向上调价 min(  (排名 - r) * k， pu )，最低调价0.2</p>
-<p>​       对于满足总曝光条件，点击率低于 1% 的品牌词，停止投放</p>
-<p>}</p>
-<h4 id="非品牌词（重点）：在目标CPA范围内，最大化转化"><a href="#非品牌词（重点）：在目标CPA范围内，最大化转化" class="headerlink" title="非品牌词（重点）：在目标CPA范围内，最大化转化"></a><strong>非品牌词（重点）：</strong>在目标CPA范围内，最大化转化</h4><p>根据目标CPA和单元CVR来算点击收益，控制新增点击成本&lt;新增点击收益</p>
-<p>单元CVR：单元注册数量/单元点击数量</p>
-<p>风险点：CVR数据稀疏</p>
-<p>设置：初始出价p0，出价上限pu，出价下限pd，目标CPA</p>
-<p>输入参数：非品牌词ID</p>
-<p>​                   每个词前一日出价，展现/点击数据，平均点击价格，平均排名，所在计划，所在单元</p>
-<p>​                   每个词累计展现/点击数据，平均点击价格，平均排名，所在计划，所在单元</p>
-<p>​                   每个单元累计消费，展现，点击，注册/回流</p>
-<p>每日调整，基于前一日数据,  以及累计数据：</p>
-<p>for（every word）</p>
-<p>{</p>
-<p>​     if（累计点击 &lt; 20 且 排名低于1.1）向上调价 0.5     //冷启动          </p>
-<p>​     if（累计点击&gt; 20 且 所在单元转化超过10个）</p>
-<p>​     {</p>
-<p>​          新增收益 = 前一日点击次数 * 单元cvr * 目标CPA</p>
-<p>​          新增成本 = 前一日费用         </p>
-<p>​          调价系数 = |（新增收益 - 新增成本）/  点击数量|</p>
-<p>​           </p>
-<p>​          //新增边际收益大于0，向上提价，寻找排名第一的最低价</p>
-<p>​          //新增边际收益小于0，向下降价至边际收益大于等于0</p>
-<p>​          If( 新增收益-新增成本&gt;0  and  排名低于1)    向上调价 0. 8  *  调价系数，最低调价 0. 2</p>
-<p>​          If( 新增收益-新增成本 &gt;0 and  排名为1） 向下调价0.2试探底价           </p>
-<p>​          if( 新增收益-新增成本 &lt;0 )    向下调价  1.2  *  调价系数，最低调价 0. 2         </p>
-<p>​     }</p>
-<p>}</p>
-<h3 id="拓词"><a href="#拓词" class="headerlink" title="拓词"></a>拓词</h3><h4 id="品类词"><a href="#品类词" class="headerlink" title="品类词"></a>品类词</h4><p>品类相似度计算</p>
-<h4 id="竟品词"><a href="#竟品词" class="headerlink" title="竟品词"></a>竟品词</h4><p>竟品相似度计算</p>
 
           
         
@@ -1598,7 +1280,7 @@
 <p>通过多项式交叉后，交叉特征的非零样本更加稀疏；采用一种矩阵分解的思路，为每个单特征学习一个k维向量v（只要该非零特征出现了，v便能得到训练）。</p>
 <p>复杂度线性/样本稀疏的情况下有优势。</p>
 <p><strong>该模型公式如下：</strong></p>
-<p><img src="/2019/10/20/ctr预估常用模型/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/ctr%E9%A2%84%E4%BC%B0%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9E%8B/585228-20171123143833790-1275951688.png" alt="img"></p>
+<p><img src="/2019/10/20/ctr预估常用模型/585228-20171123143833790-1275951688.png" alt="img"></p>
 <h2 id="FMM-（2015年）"><a href="#FMM-（2015年）" class="headerlink" title="FMM （2015年）"></a>FMM （2015年）</h2>
           
         
@@ -1792,6 +1474,298 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/24/ctr校正/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yvelzhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yvelzhang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/24/ctr校正/" itemprop="url">推荐系统负样本降采样后ctr校正</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-24T20:02:29+08:00">
+                2019-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在训练广告的CTR模型时，训练数据出现严重正负样本不对称，负样本一般是正样本的几十倍。对于这种问题，常用的做法是对负样本进行采样，将采样后的负样本和正样本一起作为训练数据。但是这样的训练数据训练出的模型预测ctr会大于实际ctr。</p>
+<p>目前有两种常用校准方法，分别是<strong>facebook的prior correction方法</strong> 和 <strong>谷歌的weighting方法</strong>，下面是实际广告竞价ctr预估业务中对这两种方法的实践：</p>
+<h2 id="prior-correction-方法"><a href="#prior-correction-方法" class="headerlink" title="prior correction 方法"></a>prior correction 方法</h2><img src="/2019/09/24/ctr校正/image-20190924200916041.png" alt="image-20190924200916041" style="zoom:50%;">
+
+<img src="/2019/09/24/ctr校正/image-20190924201019218.png" alt="image-20190924201019218" style="zoom:50%;">
+
+
+
+<h4 id="校正前："><a href="#校正前：" class="headerlink" title="校正前："></a>校正前：</h4><p>Pctr与实际ctr关系</p>
+<img src="/2019/09/24/ctr校正/image-20190924201153145.png" alt="image-20190924201153145" style="zoom:50%;">
+
+<p>Pctr分布</p>
+<img src="/2019/09/24/ctr校正/image-20190924201247614.png" alt="image-20190924201247614" style="zoom:50%;">
+
+<h4 id="校正后："><a href="#校正后：" class="headerlink" title="校正后："></a>校正后：</h4><p>Pctr 与 ctr关系</p>
+<img src="/2019/09/24/ctr校正/image-20190924201330406.png" alt="image-20190924201330406" style="zoom:50%;">
+
+<p>大于0.2之后曲线抖动剧烈，是因为数据稀疏引起的，绝大部分pctr都预估在0.2以内，可以查看下图pctr分布</p>
+<p>Pctr分布：大于0.2的数量非常少</p>
+<img src="/2019/09/24/ctr校正/image-20190924201427016.png" alt="image-20190924201427016" style="zoom:50%;">
+
+<h2 id="weighting方法"><a href="#weighting方法" class="headerlink" title="weighting方法"></a>weighting方法</h2><p>该方法是在训练模型时，给正负样本设置不同的权重。正样本权重为 1 ，负样本权重1/r。这种方法在模型本身有偏差时鲁棒性强于前者，但是使用FTRL时效果不好，可能的原因是在线学习算法需要样本随机打散，但是weighting策略中的样本权重，一定程度上阻碍了样本随机性</p>
+<p>校正后</p>
+<img src="/2019/09/24/ctr校正/image-20190924201540585.png" alt="image-20190924201540585" style="zoom:50%;">
+
+<img src="/2019/09/24/ctr校正/image-20190924201605023.png" alt="image-20190924201605023" style="zoom:50%;">
+
+<p>使用weighting之后测试集auc下降 (0.74-&gt;0.7)</p>
+<p>因此最后选择prior correction方法</p>
+<h2 id="Facebook校正方法公式推导"><a href="#Facebook校正方法公式推导" class="headerlink" title="Facebook校正方法公式推导"></a>Facebook校正方法公式推导</h2><img src="/2019/09/24/ctr校正/image-20190924201901000.png" alt style="zoom:50%;">
+
+<img src="/2019/09/24/ctr校正/image-20190924201944320.png" alt style="zoom:50%;">
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/24/gbdt-lr/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yvelzhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yvelzhang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/24/gbdt-lr/" itemprop="url">【推荐模型】facebook gbdt+lr ctr预估模型</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-24T19:55:04+08:00">
+                2019-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="评价指标"><a href="#评价指标" class="headerlink" title="评价指标"></a>评价指标</h2><p>评估指标NE（normalizedentropy）。AUC只关注了排序正确程度，而没有关注预测精准度。</p>
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>（a）     SGD-LR和BOPR都适合在线one by one 学习</p>
+<p>（b）     GBDT特征转换优点：自动特征分桶和特征交叉。<strong>实施方式</strong>：每棵树的输出为一个类别特征，进行onehot，训练方式L2-treeboost。<strong>效果</strong>：比单独使用LR或者GBDT提升3%</p>
+<p>（c）     数据新鲜度：训练-测试数据时间间隔越久，误差越高。因此模型每天更新一次。</p>
+<p>（d）     线性分类器：学习率更新per-coordinate learning rate效果最好，参数采用grid search。</p>
+<p>线性分类算法对比：与BOPR相比，LR内存消耗更小，计算更少。</p>
+<h2 id="实时在线数据生成方法"><a href="#实时在线数据生成方法" class="headerlink" title="实时在线数据生成方法"></a>实时在线数据生成方法</h2><p>（a）     一段时间没点击就是负样本，时间段阈值要谨慎选取，否则预估CTR会低于实际值</p>
+<p>（b）     在线训练model，每天发布一次</p>
+<h2 id="训练参数及特征"><a href="#训练参数及特征" class="headerlink" title="训练参数及特征"></a>训练参数及特征</h2><p>（a）     tree_nums：1-2000，超过500之后提升不明显，超过1000效果下降（过拟合）</p>
+<p>（b）     每棵树叶子节点不超过12个（个人认为原因是特征组合不能太复杂，会过拟合）</p>
+<p>（c）     Feature importance: 特征出现的节点平方误差下降累积</p>
+<p>（d）     上下文特征与历史特征</p>
+<p>上下文特征：环境特征（time of day，day of week），对数据新鲜度更敏感</p>
+<p>历史特征：历史点击情况</p>
+<p>对分类而言历史特征作用更大，上下文特征对冷启动更有用</p>
+<h2 id="大规模数据采样及校正"><a href="#大规模数据采样及校正" class="headerlink" title="大规模数据采样及校正"></a>大规模数据采样及校正</h2><p>均匀采样：使用10%数据，效果仅降低1%，无需校正。</p>
+<p>负样本降采样：解决class balance问题，FB最终取0.025，需校正，否则CTR预估偏高。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -1842,7 +1816,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
