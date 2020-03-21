@@ -86,19 +86,19 @@
 <meta property="og:site_name" content="yvelzhang">
 <meta property="og:description" content="参考：https://blog.csdn.net/zpalyq110/article/details/79527653 GBDT论文：http://biostat.jhsph.edu/~mmccall/articles/friedman_1999.pdf GBDT使用的决策树是CART回归树（无论是处理回归还是二分类），原因是GBDT每次拟合的都是梯度值（连续值），因此要使用回归树。回归树寻找最佳">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2020/03/20/GBDT原理解读/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/GBDT原理解读/image-20200320164209194.png">
-<meta property="og:image" content="http://yoursite.com/2020/03/20/GBDT原理解读/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/GBDT原理解读/image-20200320164629727.png">
-<meta property="og:image" content="http://yoursite.com/2020/03/20/GBDT原理解读/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/GBDT原理解读/image-20200320164734682.png">
-<meta property="og:image" content="http://yoursite.com/2020/03/20/GBDT原理解读/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/GBDT%E5%8E%9F%E7%90%86%E8%A7%A3%E8%AF%BB/image-20200321144903747.png">
-<meta property="og:image" content="http://yoursite.com/2020/03/20/GBDT原理解读/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/GBDT原理解读/image-20200321150044162.png">
-<meta property="og:image" content="http://yoursite.com/2020/03/20/GBDT原理解读/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/GBDT原理解读/image-20200321150816821.png">
-<meta property="og:image" content="http://yoursite.com/2020/03/20/GBDT原理解读/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/GBDT%E5%8E%9F%E7%90%86%E8%A7%A3%E8%AF%BB/image-20200321155314678.png">
-<meta property="og:image" content="http://yoursite.com/2020/03/20/GBDT原理解读/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/GBDT原理解读/image-20200321163345096.png">
-<meta property="og:updated_time" content="2020-03-21T09:10:17.686Z">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/GBDT原理解读/image-20200320164209194.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/GBDT原理解读/image-20200320164629727.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/GBDT原理解读/image-20200320164734682.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/GBDT原理解读/image-20200321144903747.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/GBDT原理解读/image-20200321150044162.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/GBDT原理解读/image-20200321150816821.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/GBDT原理解读/image-20200321155314678.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/GBDT原理解读/image-20200321163345096.png">
+<meta property="og:updated_time" content="2020-03-21T09:32:51.564Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="GBDT原理解读">
 <meta name="twitter:description" content="参考：https://blog.csdn.net/zpalyq110/article/details/79527653 GBDT论文：http://biostat.jhsph.edu/~mmccall/articles/friedman_1999.pdf GBDT使用的决策树是CART回归树（无论是处理回归还是二分类），原因是GBDT每次拟合的都是梯度值（连续值），因此要使用回归树。回归树寻找最佳">
-<meta name="twitter:image" content="http://yoursite.com/2020/03/20/GBDT原理解读/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/GBDT原理解读/image-20200320164209194.png">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/20/GBDT原理解读/image-20200320164209194.png">
 
 
 
@@ -318,11 +318,11 @@
 <p>GBDT使用的决策树是CART回归树（无论是处理回归还是二分类），原因是GBDT每次拟合的都是梯度值（连续值），因此要使用回归树。回归树寻找最佳二分点使用的是平方误差，而不是基尼指数或熵。</p>
 <h2 id="回归树生成原理"><a href="#回归树生成原理" class="headerlink" title="回归树生成原理"></a><strong>回归树生成原理</strong></h2><p>在训练数据集所在的输入空间中，递归的将每个区域划分为两个子区域并决定每个子区域上的输出值，构建二叉决策树：</p>
 <p>（1）选择最优切分变量j与切分点s，求解</p>
-<img src="/2020/03/20/GBDT原理解读/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/GBDT原理解读/image-20200320164209194.png" alt="image-20200320164209194" style="zoom:50%;">
+<img src="/2020/03/20/GBDT原理解读/image-20200320164209194.png" alt="image-20200320164209194" style="zoom:50%;">
 
 <p>遍历变量j，对固定的切分变量j扫描切分点s，选择使得上式达到最小值的对(j,s)。其中R1, R2是（j,s）分割出来的两个输入空间，c1、c2分别是这两个空间的输出均值。</p>
 <p>（2）用选定的对(j,s)划分区域并决定相应的输出值：</p>
-<img src="/2020/03/20/GBDT原理解读/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/GBDT原理解读/image-20200320164629727.png" alt="image-20200320164629727" style="zoom:50%;">
+<img src="/2020/03/20/GBDT原理解读/image-20200320164629727.png" alt="image-20200320164629727" style="zoom:50%;">
 
 <p>（3）继续对两个子区域调用步骤（1）和（2），直至满足停止条件</p>
 <p>停止条件：</p>
@@ -330,20 +330,20 @@
 <p>b. 叶子节点样本个数小于阈值</p>
 <p>c. 到达深度上限，叶子个数上限</p>
 <p>（4）将输入空间划分为M个区域 R1,R2,…RM，生成决策树：</p>
-<img src="/2020/03/20/GBDT原理解读/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/GBDT原理解读/image-20200320164734682.png" alt="image-20200320164734682" style="zoom:50%;">
+<img src="/2020/03/20/GBDT原理解读/image-20200320164734682.png" alt="image-20200320164734682" style="zoom:50%;">
 
 <p>此方法的复杂度较高，尤其在每次寻找切分点时，需要遍历当前所有特征的所有可能取值，假如总共有F个特征，每个特征有N个取值，生成的决策树有S个内部节点，则该算法的时间复杂度为：O(F x N x S)</p>
 <h2 id="Gradient-Boosting：-拟合负梯度"><a href="#Gradient-Boosting：-拟合负梯度" class="headerlink" title="Gradient Boosting： 拟合负梯度"></a>Gradient Boosting： 拟合负梯度</h2><p>梯度提升树（Grandient Boosting）是提升树（Boosting Tree）的一种改进算法，所以在讲梯度提升树之前先来说一下提升树</p>
 <p>通俗举例：假如有个人30岁，我们首先用20岁去拟合，发现损失有10岁，这时我们用6岁去拟合剩下的损失，发现差距还有4岁，第三轮我们用3岁拟合剩下的差距，差距就只有一岁了。如果我们的迭代轮数还没有完，可以继续迭代下面，每一轮迭代，拟合的岁数误差都会减小。最后将每次拟合的岁数加起来便是模型输出的结果</p>
-<p><img src="/2020/03/20/GBDT原理解读/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/GBDT%E5%8E%9F%E7%90%86%E8%A7%A3%E8%AF%BB/image-20200321144903747.png" alt="image-20200321144903747"></p>
+<p><img src="/2020/03/20/GBDT原理解读/image-20200321144903747.png" alt="image-20200321144903747"></p>
 <p><strong>残差是什么</strong></p>
-<img src="/2020/03/20/GBDT原理解读/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/GBDT原理解读/image-20200321150044162.png" alt="image-20200321150044162" style="zoom:50%;">
+<img src="/2020/03/20/GBDT原理解读/image-20200321150044162.png" alt="image-20200321150044162" style="zoom:50%;">
 
 <p>当损失函数是平方损失和指数损失函数时，梯度提升树每一步优化是很简单的，但是对于一般损失函数而言，往往每一步优化起来不那么容易，针对这一问题，Friedman提出了梯度提升树算法，这是利用最速下降的近似方法，<strong>其关键是利用损失函数的负梯度作为提升树算法中的残差的近似值。</strong></p>
 <p><strong>什么是负梯度？</strong></p>
-<img src="/2020/03/20/GBDT原理解读/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/GBDT原理解读/image-20200321150816821.png" alt="image-20200321150816821" style="zoom:50%;">
+<img src="/2020/03/20/GBDT原理解读/image-20200321150816821.png" alt="image-20200321150816821" style="zoom:50%;">
 
-<h2 id="GBDT算法流程"><a href="#GBDT算法流程" class="headerlink" title="GBDT算法流程"></a>GBDT算法流程</h2><p><img src="/2020/03/20/GBDT原理解读/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/GBDT%E5%8E%9F%E7%90%86%E8%A7%A3%E8%AF%BB/image-20200321155314678.png" alt="image-20200321155314678"></p>
+<h2 id="GBDT算法流程"><a href="#GBDT算法流程" class="headerlink" title="GBDT算法流程"></a>GBDT算法流程</h2><p><img src="/2020/03/20/GBDT原理解读/image-20200321155314678.png" alt="image-20200321155314678"></p>
 <h2 id="GBDT的优缺点"><a href="#GBDT的优缺点" class="headerlink" title="GBDT的优缺点"></a>GBDT的优缺点</h2><p><strong>优点：</strong></p>
 <ul>
 <li>可以灵活处理各种类型的数据，包括连续值和离散值。</li>
@@ -357,7 +357,7 @@
 </ul>
 <h2 id="其他知识点"><a href="#其他知识点" class="headerlink" title="其他知识点"></a>其他知识点</h2><p><strong>学习率</strong></p>
 <p>Shrinkage（缩减）的思想认为，每次走一小步逐渐逼近结果的效果，要比每次迈一大步很快逼近结果的方式更容易避免过拟合。即它不完全信任每一个棵残差树，它认为每棵树只学到了真理的一小部分，累加的时候只累加一小部分，通过多学几棵树弥补不足。因此每次叠加新的一棵树时，会乘一个学习率，学习率通过线性搜索获得，公式如下：</p>
-<img src="/2020/03/20/GBDT原理解读/yifeizhang/Desktop/zyf/hexo/blog/source/_posts/GBDT原理解读/image-20200321163345096.png" alt="image-20200321163345096" style="zoom:50%;">
+<img src="/2020/03/20/GBDT原理解读/image-20200321163345096.png" alt="image-20200321163345096" style="zoom:50%;">
 
 <p><strong>提升树和梯度提升树的区别</strong></p>
 <ol>
