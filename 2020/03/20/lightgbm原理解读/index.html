@@ -90,7 +90,8 @@
 <meta property="og:image" content="http://yoursite.com/2020/03/20/lightgbm原理解读/image-20200328200036387.png">
 <meta property="og:image" content="http://yoursite.com/2020/03/20/lightgbm原理解读/image-20200328205103839.png">
 <meta property="og:image" content="http://yoursite.com/2020/03/20/lightgbm原理解读/image-20200328195842857.png">
-<meta property="og:updated_time" content="2020-03-28T13:12:42.479Z">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/lightgbm原理解读/image-20200329164741404.png">
+<meta property="og:updated_time" content="2020-03-29T08:58:43.670Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="xgboost&#x2F;lightgbm原理解读">
 <meta name="twitter:description" content="论文：http://103.95.217.77/papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision-tree.pdf 源码：https://github.com/microsoft/LightGBM GBDT原理解读： http://yvelzhang.site/2020/03/20/GB">
@@ -384,6 +385,12 @@
 <p>b. 对于bin容器较多的情况, 先进行过滤，只让子集合较大的bin容器参加划分阈值计算, 对每一个符合条件的bin容器进行公式计算(公式如下: 该bin容器下所有样本的一阶梯度之和 / 该bin容器下所有样本的二阶梯度之和 + 正则项(参数cat_smooth)，这里为什么不是label的均值呢？其实上例中只是为了便于理解，只针对了学习一棵树且是回归问题的情况， 这时候一阶导数是Y, 二阶导数是1)，得到一个值，根据该值对bin容器从小到大进行排序，然后分从左到右、从右到左进行搜索，得到最优分裂阈值。但是有一点，没有搜索所有的bin容器，而是设定了一个搜索bin容器数量的上限值，程序中设定是32，即参数max_num_cat。这32个bin中最优划分的阈值的左边或者右边所有的bin容器就是一个many集合，而其他的bin容器就是另一个many集合。</p>
 <p>c.  对于连续特征，划分阈值只有一个，对于离散值可能会有多个划分阈值，每一个划分阈值对应着一个bin容器编号，当使用离散特征进行分裂时，只要数据样本对应的bin容器编号在这些阈值对应的bin集合之中，这条数据就加入分裂后的左子树，否则加入分裂后的右子树</p>
 <p><strong>Lightgbm预测时, 对于在训练中没有出现过的类别特征，当成空缺值处理</strong>。</p>
+<p><strong>补充：</strong></p>
+<p><strong>lightgbm如何处理L1这种二阶倒数(hess)为constant的特征</strong>，在github看到的一段回答：</p>
+<img src="/2020/03/20/lightgbm原理解读/image-20200329164741404.png" alt="image-20200329164741404" style="zoom:50%;">
+
+<p>大意是，对于这种特征，在寻找最佳分割点时只使用一阶导数；叶子节点输出使用的是该叶子上所有样本残差的平均（对于正常二阶导数的loss，叶子节点输出为 L’^2/L’’）。</p>
+<p><strong>对于用户自己实现的 custom loss，lightgbm默认为non-constant hessian（所以必须保证二阶可导），叶子节点输出L’^2/L’’</strong></p>
 
       
     </div>
@@ -497,7 +504,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
